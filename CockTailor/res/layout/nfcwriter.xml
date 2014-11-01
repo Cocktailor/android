@@ -14,7 +14,7 @@
         android:hint="Mime-type"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="application/com.cs408.cocktaylor" />
+        android:text="application/com.cs408.cocktailor" />
 
     <EditText
         android:id="@+id/value"

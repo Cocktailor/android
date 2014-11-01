@@ -1,4 +1,4 @@
-package com.cs408.cocktaylor;
+package com.cs408.cocktailor_Activity;
 
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class NFCWriter extends Activity {
 
 	boolean mWriteMode = false;
 	private NfcAdapter mNfcAdapter;
@@ -34,19 +34,19 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.nfcwriter);
 		
 		((Button) findViewById(R.id.button)).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				mNfcAdapter = NfcAdapter.getDefaultAdapter(MainActivity.this);
-				mNfcPendingIntent = PendingIntent.getActivity(MainActivity.this, 0,
-				    new Intent(MainActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+				mNfcAdapter = NfcAdapter.getDefaultAdapter(NFCWriter.this);
+				mNfcPendingIntent = PendingIntent.getActivity(NFCWriter.this, 0,
+				    new Intent(NFCWriter.this, NFCWriter.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
 				enableTagWriteMode();
 				 
-				new AlertDialog.Builder(MainActivity.this).setTitle("Touch tag to write")
+				new AlertDialog.Builder(NFCWriter.this).setTitle("Touch tag to write")
 				    .setOnCancelListener(new DialogInterface.OnCancelListener() {
 				        @Override
 				        public void onCancel(DialogInterface dialog) {

@@ -1,4 +1,4 @@
-package com.cs408.cocktaylor;
+package com.cs408.cocktailor_Activity;
 
 import java.io.UnsupportedEncodingException;
 import android.app.Activity;
@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 public class NfcRead extends Activity {
 	private NfcAdapter mNfcAdapter;
-	public static final String MIME_TEXT_PLAIN = "application/com.cs408.cocktaylor";
+	public static final String MIME_TEXT_PLAIN = "application/com.cs408.cocktailor";
 
 
 	@Override
@@ -161,7 +161,11 @@ public class NfcRead extends Activity {
 		protected void onPostExecute(String result) {
 
 			if (result != null) {
-				Toast.makeText(NfcRead.this, result, Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+				intent.setClass(getApplicationContext(),MenuActivity.class);
+				startActivity(intent);
+				
+				Toast.makeText(NfcRead.this, "NFC is tagged!", Toast.LENGTH_SHORT).show();
 			}
 		}
 
