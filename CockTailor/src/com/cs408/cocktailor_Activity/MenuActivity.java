@@ -29,14 +29,10 @@ public class MenuActivity extends Activity {
 		setContentView(R.layout.cocktail_menu);
 
 		setLayout();
-
+		NfcRead.NFCRead_activity.finish();
 		mGroupList = new ArrayList<String>();
 		mChildList = new ArrayList<ArrayList<String>>();
 		mChildListContent = new ArrayList<String>();
-
-		mGroupList.add("가위");
-		mGroupList.add("바위");
-		mGroupList.add("보");
 
 		mChildListContent.add("1");
 		mChildListContent.add("2");

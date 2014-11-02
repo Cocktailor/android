@@ -19,12 +19,14 @@ import android.widget.Toast;
 
 public class NfcRead extends Activity {
 	private NfcAdapter mNfcAdapter;
+	public static Activity NFCRead_activity;
 	public static final String MIME_TEXT_PLAIN = "application/com.cs408.cocktailor";
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		NFCRead_activity = this;
 
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
@@ -163,6 +165,7 @@ public class NfcRead extends Activity {
 			if (result != null) {
 				Intent intent = new Intent();
 				intent.setClass(getApplicationContext(),MenuActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 				
 				Toast.makeText(NfcRead.this, "NFC is tagged!", Toast.LENGTH_SHORT).show();

@@ -13,14 +13,9 @@
         android:id="@+id/tv_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25dip" 
+        android:textSize="15sp"
+        android:text="Group" 
         />
 
-    <TextView
-        android:id="@+id/tv_child"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dip" 
-        /> 
-
+ 
 </LinearLayout>

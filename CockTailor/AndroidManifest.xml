@@ -28,6 +28,7 @@
         <activity
             android:name="com.cs408.cocktailor_Activity.MenuActivity"
             android:launchMode="singleTop"
+            android:excludeFromRecents="true"
         />
         <activity
             android:name="com.cs408.cocktailor_Activity.NfcRead"

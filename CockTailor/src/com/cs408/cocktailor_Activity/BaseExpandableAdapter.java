@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import com.appmaker.nfcread.R;
 
@@ -18,6 +19,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 	private ArrayList<ArrayList<String>> childList = null;
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
+	
 	
 	public BaseExpandableAdapter(Context c, ArrayList<String> groupList, 
 			ArrayList<ArrayList<String>> childList){
@@ -53,7 +55,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 		
 		if(v == null){
 			viewHolder = new ViewHolder();
-			v = inflater.inflate(R.layout.list_row, parent, false);
+			v = inflater.inflate(R.layout.category_list_row, parent, false);
 			viewHolder.tv_groupName = (TextView) v.findViewById(R.id.tv_group);
 			viewHolder.iv_image = (ImageView) v.findViewById(R.id.iv_image);
 			v.setTag(viewHolder);
@@ -95,8 +97,15 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 		
 		if(v == null){
 			viewHolder = new ViewHolder();
-			v = inflater.inflate(R.layout.list_row, null);
+			v = inflater.inflate(R.layout.cocktail_list_row, null);
 			viewHolder.tv_childName = (TextView) v.findViewById(R.id.tv_child);
+			viewHolder.rating = (RatingBar)v.findViewById(R.id.ratingBar1);
+			
+			viewHolder.rating.setStepSize((float) 0.5);        //별 색깔이 1칸씩줄어들고 늘어남 0.5로하면 반칸씩 들어감
+			viewHolder.rating.setRating((float) 4.5);      // 처음보여줄때(색깔이 한개도없음) default 값이 0  이다
+			viewHolder.rating.setIsIndicator(true);
+
+			
 			v.setTag(viewHolder);
 		}else{
 			viewHolder = (ViewHolder)v.getTag();
@@ -117,6 +126,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter{
 		public ImageView iv_image;
 		public TextView tv_groupName;
 		public TextView tv_childName;
+		public RatingBar rating;
 	}
 
 }
