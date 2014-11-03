@@ -14,13 +14,14 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MenuActivity extends Activity {
 
 	private ArrayList<String> mGroupList = null;
 	private ArrayList<ArrayList<String>> mChildList = null;
-	private ArrayList<String> mChildListContent = null;
+	private ArrayList<String> mChildListContent1 = null;
 	private BaseExpandableAdapter adapter;
 
 	@Override
@@ -32,18 +33,17 @@ public class MenuActivity extends Activity {
 		NfcRead.NFCRead_activity.finish();
 		mGroupList = new ArrayList<String>();
 		mChildList = new ArrayList<ArrayList<String>>();
-		mChildListContent = new ArrayList<String>();
+		mChildListContent1 = new ArrayList<String>();
 
-		mChildListContent.add("1");
-		mChildListContent.add("2");
-		mChildListContent.add("3");
+		mChildListContent1.add("Midori Sour");
+		mChildListContent1.add("Sex on the beach");
+		mChildListContent1.add("Gin Tonic");
 
-		mChildList.add(mChildListContent);
-		mChildList.add(mChildListContent);
-		mChildList.add(mChildListContent);
+		mChildList.add(mChildListContent1);
+		mChildList.add(mChildListContent1);
+		mChildList.add(mChildListContent1);
 
-		adapter = new BaseExpandableAdapter(this, mGroupList,
-				mChildList);
+		adapter = new BaseExpandableAdapter(this, mGroupList, mChildList);
 		mListView.setAdapter(adapter);
 
 		// 그룹 클릭 했을 경우 이벤트
@@ -89,26 +89,39 @@ public class MenuActivity extends Activity {
 						.show();
 			}
 		});
-		(new Menu_receive()).execute("Receiving menu list test"); 
+
+		order_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), "confirm cart",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+
+		(new Menu_receive()).execute("Receiving menu list test");
 	}
 
 	/*
 	 * Layout
 	 */
 	private ExpandableListView mListView;
+	private ImageButton order_button;
 
 	private void setLayout() {
 		mListView = (ExpandableListView) findViewById(R.id.elv_list);
+		order_button = (ImageButton) findViewById(R.id.order_button1);
 	}
 
 	public class Menu_receive extends
 			AsyncTask<String, Void, ArrayList<String>> {
-		private final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
+		private final ProgressDialog dialog = new ProgressDialog(
+				MenuActivity.this);
 
 		@Override
 		protected void onPostExecute(ArrayList<String> result) {
 			super.onPostExecute(result);
 			adapter.setGroup(result);
+
 			adapter.notifyDataSetChanged();
 			dialog.dismiss();
 
@@ -124,6 +137,20 @@ public class MenuActivity extends Activity {
 		@Override
 		protected ArrayList<String> doInBackground(String... params) {
 			ArrayList<String> result = new ArrayList<String>();
+			ArrayList<ArrayList<String>> detail_menu = new ArrayList<ArrayList<String>>();
+			ArrayList<String> menu1 = new ArrayList<String>();
+			ArrayList<String> menu2 = new ArrayList<String>();
+			menu1.add("Midori Sour");
+			menu1.add("Sex on the beach");
+			menu1.add("Gin Tonic");
+
+			menu2.add("Pinacolada");
+			menu2.add("Black Russian");
+			menu2.add("Pink Lady");
+
+			detail_menu.add(menu1);
+			detail_menu.add(menu2);
+			adapter.setChild(detail_menu);
 
 			try {
 				/*

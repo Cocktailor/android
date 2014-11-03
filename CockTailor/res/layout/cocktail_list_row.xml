@@ -7,17 +7,27 @@
         android:id="@+id/tv_child"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="Child" 
-        />
-    
-    <RatingBar android:layout_height="wrap_content"
-                          android:layout_width="wrap_content"
-                          android:id="@+id/ratingBar1" />
+        android:maxWidth="100dp"
+        android:minWidth="100dp"
+        android:text="@string/textview_test"
+        android:textSize="15sp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />    
 
     <ImageButton
         android:id="@+id/menu_add_button1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:src="@drawable/menu_plus_button" />
 
 </LinearLayout>
