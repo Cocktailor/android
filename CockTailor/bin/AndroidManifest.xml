@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.appmaker.nfcread"
+    package="com.cs408.cocktailor_Activity"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -31,8 +31,11 @@
             android:excludeFromRecents="true"
         />
         <activity
+            android:name="com.cs408.cocktailor_Activity.CartActivity"
+        />
+        <activity
             android:name="com.cs408.cocktailor_Activity.NfcRead"
-            android:launchMode="singleInstance" >
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 

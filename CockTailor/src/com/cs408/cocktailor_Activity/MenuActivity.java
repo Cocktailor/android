@@ -1,9 +1,8 @@
 package com.cs408.cocktailor_Activity;
 
-import com.appmaker.nfcread.R;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class MenuActivity extends Activity {
 		setContentView(R.layout.cocktail_menu);
 
 		setLayout();
-		NfcRead.NFCRead_activity.finish();
+		//NfcRead.NFCRead_activity.finish();
 		mGroupList = new ArrayList<String>();
 		mChildList = new ArrayList<ArrayList<String>>();
 		mChildListContent1 = new ArrayList<String>();
@@ -51,9 +50,6 @@ public class MenuActivity extends Activity {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
 					int groupPosition, long id) {
-				Toast.makeText(getApplicationContext(),
-						"g click = " + groupPosition, Toast.LENGTH_SHORT)
-						.show();
 				return false;
 			}
 		});
@@ -63,9 +59,9 @@ public class MenuActivity extends Activity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				Toast.makeText(getApplicationContext(),
+				/*Toast.makeText(getApplicationContext(),
 						"c click = " + childPosition, Toast.LENGTH_SHORT)
-						.show();
+						.show();*/
 				return false;
 			}
 		});
@@ -74,9 +70,9 @@ public class MenuActivity extends Activity {
 		mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				Toast.makeText(getApplicationContext(),
+				/*Toast.makeText(getApplicationContext(),
 						"g Collapse = " + groupPosition, Toast.LENGTH_SHORT)
-						.show();
+						.show();*/
 			}
 		});
 
@@ -84,17 +80,21 @@ public class MenuActivity extends Activity {
 		mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			@Override
 			public void onGroupExpand(int groupPosition) {
-				Toast.makeText(getApplicationContext(),
+				/*Toast.makeText(getApplicationContext(),
 						"g Expand = " + groupPosition, Toast.LENGTH_SHORT)
-						.show();
+						.show();*/
 			}
 		});
 
-		order_button.setOnClickListener(new View.OnClickListener() {
+		cart_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(v.getContext(), "confirm cart",
 						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent();
+				intent.setClass(getApplicationContext(),CartActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 			}
 		});
 
@@ -105,11 +105,11 @@ public class MenuActivity extends Activity {
 	 * Layout
 	 */
 	private ExpandableListView mListView;
-	private ImageButton order_button;
+	private ImageButton cart_button;
 
 	private void setLayout() {
 		mListView = (ExpandableListView) findViewById(R.id.menu_list);
-		order_button = (ImageButton) findViewById(R.id.order_button1);
+		cart_button = (ImageButton) findViewById(R.id.order_button1);
 	}
 
 	public class Menu_receive extends

@@ -3,11 +3,10 @@ package com.cs408.cocktailor_Activity;
 
 import java.io.IOException;
 
-import com.appmaker.nfcread.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -35,7 +34,6 @@ public class NFCWriter extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nfcwriter);
-		
 		((Button) findViewById(R.id.button)).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -55,6 +53,18 @@ public class NFCWriter extends Activity {
 
 				    }).create().show();		
 			}
+		});
+		((Button) findViewById(R.id.go_to_menu)).setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(NFCWriter.this, MenuActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+				
+			}
+			
 		});
 	}
 	

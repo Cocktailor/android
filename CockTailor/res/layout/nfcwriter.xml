@@ -28,5 +28,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start write modus" />
+    <Button
+        android:id="@+id/go_to_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to MenuActivity" />
 
 </LinearLayout>

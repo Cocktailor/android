@@ -1,9 +1,16 @@
 package com.cs408.cocktailor_Activity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +21,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appmaker.nfcread.R;
-
 public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
 	private ArrayList<String> groupList = null;
 	private ArrayList<ArrayList<String>> childList = null;
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
+	private SharedPreferences prefs;
 
 	public BaseExpandableAdapter(Context c, ArrayList<String> groupList,
 			ArrayList<ArrayList<String>> childList) {
 		super();
 		this.inflater = LayoutInflater.from(c);
+
+		this.prefs = c.getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
 		this.groupList = groupList;
 		this.childList = childList;
 	}
@@ -96,11 +104,14 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		return childPosition;
 	}
 
-	@Override
-	public View getChildView(final int groupPosition, final int childPosition,
+	@SuppressLint("InflateParams") @Override
+	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
 		View v = convertView;
+		final int groupP = groupPosition;
+		final int childP = childPosition;
+		
 
 		if (v == null) {
 			viewHolder = new ViewHolder();
@@ -120,10 +131,25 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 					.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
+							Editor edit = prefs.edit();
+							int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
+							Set<String> added_menu = prefs.getStringSet("added_menu", null);
+							int cnt = prefs.getInt("count", 0);
+							if(ex_cart==0){
+								edit.putInt(getChild(groupP, childP), 1);
+								added_menu.add(getChild(groupP, childP));
+								cnt+=1;
+							}
+							else{
+								edit.putInt(getChild(groupP, childP), ex_cart+1);
+							}
+							edit.putInt("count", cnt);
+							edit.putStringSet("added_menu", added_menu);
+							edit.commit();
 							Toast.makeText(
 									v.getContext(),
-									childList.get(groupPosition).get(childPosition)
-											+ "is added in cart",
+									getChild(groupP, childP)
+											+ "is added in cart\n" + "cnt = " + Integer.toString(cnt),
 									Toast.LENGTH_SHORT).show();
 						}
 					});
