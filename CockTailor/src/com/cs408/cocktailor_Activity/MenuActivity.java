@@ -108,7 +108,7 @@ public class MenuActivity extends Activity {
 	private ImageButton order_button;
 
 	private void setLayout() {
-		mListView = (ExpandableListView) findViewById(R.id.elv_list);
+		mListView = (ExpandableListView) findViewById(R.id.menu_list);
 		order_button = (ImageButton) findViewById(R.id.order_button1);
 	}
 
