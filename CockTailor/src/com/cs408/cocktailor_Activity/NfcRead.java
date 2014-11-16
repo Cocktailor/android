@@ -61,7 +61,7 @@ public class NfcRead extends Activity {
 			if (type.contains(MIME_TEXT_PLAIN)) {
 				Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-				Toast.makeText(NfcRead.this, "NFC is tagged!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(NfcRead.this, "NFC is tagged!", Toast.LENGTH_SHORT).show();
 				new NdefReaderTask().execute(tag);
 
 			} else {
@@ -165,8 +165,9 @@ public class NfcRead extends Activity {
 
 			if (result != null) {
 				Intent intent = new Intent();
-				intent.setClass(getApplicationContext(),MenuActivity.class);
+				intent.setClass(getApplicationContext(),SplashScreen.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+				Log.e("my",result);
 				startActivity(intent);
 				
 				

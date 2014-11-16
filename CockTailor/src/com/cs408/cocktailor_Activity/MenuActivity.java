@@ -6,7 +6,23 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -19,6 +35,7 @@ import android.widget.Toast;
 public class MenuActivity extends Activity {
 
 	private ArrayList<String> mGroupList = null;
+	private ArrayList<String> list = new ArrayList<String>();
 	private ArrayList<ArrayList<String>> mChildList = null;
 	private ArrayList<String> mChildListContent1 = null;
 	private BaseExpandableAdapter adapter;
@@ -29,7 +46,8 @@ public class MenuActivity extends Activity {
 		setContentView(R.layout.cocktail_menu);
 
 		setLayout();
-		//NfcRead.NFCRead_activity.finish();
+		// NfcRead.NFCRead_activity.finish();
+
 		mGroupList = new ArrayList<String>();
 		mChildList = new ArrayList<ArrayList<String>>();
 		mChildListContent1 = new ArrayList<String>();
@@ -59,9 +77,10 @@ public class MenuActivity extends Activity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				/*Toast.makeText(getApplicationContext(),
-						"c click = " + childPosition, Toast.LENGTH_SHORT)
-						.show();*/
+				/*
+				 * Toast.makeText(getApplicationContext(), "c click = " +
+				 * childPosition, Toast.LENGTH_SHORT) .show();
+				 */
 				return false;
 			}
 		});
@@ -70,9 +89,10 @@ public class MenuActivity extends Activity {
 		mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				/*Toast.makeText(getApplicationContext(),
-						"g Collapse = " + groupPosition, Toast.LENGTH_SHORT)
-						.show();*/
+				/*
+				 * Toast.makeText(getApplicationContext(), "g Collapse = " +
+				 * groupPosition, Toast.LENGTH_SHORT) .show();
+				 */
 			}
 		});
 
@@ -80,9 +100,10 @@ public class MenuActivity extends Activity {
 		mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			@Override
 			public void onGroupExpand(int groupPosition) {
-				/*Toast.makeText(getApplicationContext(),
-						"g Expand = " + groupPosition, Toast.LENGTH_SHORT)
-						.show();*/
+				/*
+				 * Toast.makeText(getApplicationContext(), "g Expand = " +
+				 * groupPosition, Toast.LENGTH_SHORT) .show();
+				 */
 			}
 		});
 
@@ -92,13 +113,15 @@ public class MenuActivity extends Activity {
 				Toast.makeText(v.getContext(), "confirm cart",
 						Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent();
-				intent.setClass(getApplicationContext(),CartActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setClass(getApplicationContext(), CartActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 			}
 		});
 
-		(new Menu_receive()).execute("Receiving menu list test");
+		(new Menu_receive())
+				.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
 	}
 
 	/*
@@ -151,36 +174,31 @@ public class MenuActivity extends Activity {
 			detail_menu.add(menu1);
 			detail_menu.add(menu2);
 			adapter.setChild(detail_menu);
+			result.add("Category 1");
+			result.add("Category 2");
+			try{
+				// (1)
+				HttpGet method = new HttpGet(params[0]);
+				// (2)
+				DefaultHttpClient client = new DefaultHttpClient();
+				// 헤더를 설정
+				method.setHeader("Connection", "Keep-Alive");
+				// (3)
+				HttpResponse response = client.execute(method);
+				// (4) response status 가 400 이 아니라면 ( 오류나면 )
+				int status = response.getStatusLine().getStatusCode();
+				if (status != HttpStatus.SC_OK)
+					throw new Exception(""); // 실패
+				// (5) response 받기 JSONArray 로 파싱
+				String str = EntityUtils
+						.toString(response.getEntity(), "UTF-8");
+				JSONArray test_result = new JSONArray(str);
 
-			try {
-				/*
-				 * URL u = new URL(params[0]);
-				 * 
-				 * HttpURLConnection conn = (HttpURLConnection)
-				 * u.openConnection(); conn.setRequestMethod("GET");
-				 * 
-				 * conn.connect(); InputStream is = conn.getInputStream();
-				 * 
-				 * // Read the stream byte[] b = new byte[1024];
-				 * ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				 * 
-				 * while (is.read(b) != -1) baos.write(b);
-				 * 
-				 * String JSONResp = new String(baos.toByteArray());
-				 * 
-				 * JSONArray arr = new JSONArray(JSONResp); for (int i = 0; i <
-				 * arr.length(); i++) {
-				 * result.add(convertContact(arr.getJSONObject(i))); }
-				 */
-				result.add("Category 1");
-				result.add("Category 2");
-
-				return result;
-			} catch (Throwable t) {
-				t.printStackTrace();
 			}
-			return null;
+			catch (Exception e)
+			{
+			}
+			return result;
 		}
-
 	}
 }
