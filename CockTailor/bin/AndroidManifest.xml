@@ -24,13 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.cs408.cocktailor_Activity.NFCWriter"
-            android:label="@string/app_name"  >
-            
+            android:label="@string/app_name" >
         </activity>
-                <activity
+        <activity
             android:name="com.cs408.cocktailor_Activity.MenuActivity"
             android:launchMode="singleTop"
             android:excludeFromRecents="true"

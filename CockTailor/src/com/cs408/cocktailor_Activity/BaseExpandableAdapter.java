@@ -133,7 +133,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 						public void onClick(View v) {
 							Editor edit = prefs.edit();
 							int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
-							Set<String> added_menu = prefs.getStringSet("added_menu", null);
+							Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
 							int cnt = prefs.getInt("count", 0);
 							if(ex_cart==0){
 								edit.putInt(getChild(groupP, childP), 1);

@@ -153,7 +153,7 @@ public class MenuActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog.setMessage("Downloading contacts...");
+			dialog.setMessage("Downloading Menu...");
 			dialog.show();
 		}
 
@@ -175,10 +175,12 @@ public class MenuActivity extends Activity {
 			detail_menu.add(menu2);
 			adapter.setChild(detail_menu);
 			result.add("Category 1");
+
+			Log.d("asdf","JSON Receive");
 			result.add("Category 2");
 			try{
 				// (1)
-				HttpGet method = new HttpGet(params[0]);
+				HttpGet method = new HttpGet("http://cs408.kaist.ac.kr:4418/menu_receive");
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
 				// 헤더를 설정
@@ -187,16 +189,23 @@ public class MenuActivity extends Activity {
 				HttpResponse response = client.execute(method);
 				// (4) response status 가 400 이 아니라면 ( 오류나면 )
 				int status = response.getStatusLine().getStatusCode();
-				if (status != HttpStatus.SC_OK)
+				if (status != HttpStatus.SC_OK){
+					Log.e("asdf","Connection is failed");
 					throw new Exception(""); // 실패
+
+					
+				}
 				// (5) response 받기 JSONArray 로 파싱
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
 				JSONArray test_result = new JSONArray(str);
 
+				Log.e("asdf",test_result.toString());
+
 			}
 			catch (Exception e)
 			{
+				Log.e("asdf","Connection is failed");
 			}
 			return result;
 		}
