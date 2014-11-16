@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -21,6 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.util.Log;
 import android.view.View;
@@ -161,31 +167,19 @@ public class MenuActivity extends Activity {
 		protected ArrayList<String> doInBackground(String... params) {
 			ArrayList<String> result = new ArrayList<String>();
 			ArrayList<ArrayList<String>> detail_menu = new ArrayList<ArrayList<String>>();
+			HashMap<Integer, ArrayList<String>> menu_storage = new HashMap<Integer, ArrayList<String>>();
 			ArrayList<String> menu1 = new ArrayList<String>();
 			ArrayList<String> menu2 = new ArrayList<String>();
-			menu1.add("Midori Sour");
-			menu1.add("Sex on the beach");
-			menu1.add("Gin Tonic");
-
-			menu2.add("Pinacolada");
-			menu2.add("Black Russian");
-			menu2.add("Pink Lady");
-
-			detail_menu.add(menu1);
-			detail_menu.add(menu2);
-			adapter.setChild(detail_menu);
-			result.add("Category 1");
-
-			Log.d("asdf","JSON Receive");
-			result.add("Category 2");
+			
 			try{
 				// (1)
 				HttpGet method = new HttpGet("http://cs408.kaist.ac.kr:4418/menu_receive");
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
 				// 헤더를 설정
-				method.setHeader("Connection", "Keep-Alive");
+				//method.setHeader("Connection", "Keep-Alive");
 				// (3)
+				Log.d("asdf","JSON Receive");
 				HttpResponse response = client.execute(method);
 				// (4) response status 가 400 이 아니라면 ( 오류나면 )
 				int status = response.getStatusLine().getStatusCode();
@@ -198,14 +192,39 @@ public class MenuActivity extends Activity {
 				// (5) response 받기 JSONArray 로 파싱
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
-				JSONArray test_result = new JSONArray(str);
+				JSONObject jsonObject = new JSONObject(str);
+				JSONArray category=jsonObject.getJSONArray("category");
+				JSONArray cocktail_menu = jsonObject.getJSONArray("menu");
+				JSONObject temporary;
 
-				Log.e("asdf",test_result.toString());
+				for(int i=0;i<cocktail_menu.length();i++){
+					temporary = cocktail_menu.getJSONObject(i);
+					int menu_id = temporary.getInt("category_id");
+					String menu_name = temporary.getString("name");
+					if(!menu_storage.containsKey(menu_id))
+						menu_storage.put(menu_id, new ArrayList<String>());
+					menu_storage.get(menu_id).add(menu_name);
+				}
+				
+				Set<Entry<Integer,ArrayList<String>>> set = menu_storage.entrySet();
+				Iterator<Entry<Integer, ArrayList<String>>> it = set.iterator();
+				
+				while (it.hasNext()) {
+					Map.Entry<Integer,ArrayList<String>> e = (Map.Entry<Integer,ArrayList<String>>)it.next();
+					detail_menu.add(e.getValue());
+
+				}
+				adapter.setChild(detail_menu);
+				
+				for(int i=0;i<category.length();i++){
+					result.add(category.getJSONObject(i).getString("name"));
+				}
+
 
 			}
 			catch (Exception e)
 			{
-				Log.e("asdf","Connection is failed");
+				Log.e("asdf",e.getMessage());
 			}
 			return result;
 		}
