@@ -53,8 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_weight="1"
-            android:src="@drawable/order_button" />
+            android:layout_weight="0.5"
+            android:src="@drawable/cocktailor_cart_button1" />
     </LinearLayout>
 
 </LinearLayout>

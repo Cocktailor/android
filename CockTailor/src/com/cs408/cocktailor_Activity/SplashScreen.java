@@ -36,6 +36,7 @@ public class SplashScreen extends Activity {
             	if(prefs.getBoolean("NFC", false)){
             		Editor edit = prefs.edit();
             		edit.putBoolean("NFC", false);
+            		edit.commit();
             		i =  new Intent(SplashScreen.this, MenuActivity.class);
             	}
             	else{
