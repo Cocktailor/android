@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.content.SharedPreferences.Editor;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 public class NfcRead extends Activity {
 	private NfcAdapter mNfcAdapter;
 	public static Activity NFCRead_activity;
+	private SharedPreferences prefs;
 	public static final String MIME_TEXT_PLAIN = "application/com.cs408.cocktailor";
 
 
@@ -166,11 +169,15 @@ public class NfcRead extends Activity {
 			if (result != null) {
 				Intent intent = new Intent();
 				intent.setClass(getApplicationContext(),SplashScreen.class);
+				prefs=getSharedPreferences("from",Activity.MODE_PRIVATE);
+				Editor edit = prefs.edit();
+				edit.putBoolean("NFC", true);
+				edit.commit();
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.e("my",result);
 				startActivity(intent);
 				
-				
+				finish();
 			}
 		}
 

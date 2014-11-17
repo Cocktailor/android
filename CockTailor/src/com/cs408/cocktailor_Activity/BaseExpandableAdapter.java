@@ -127,39 +127,38 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 														// default 값이 0 이다
 			viewHolder.rating.setIsIndicator(true);
 
-			viewHolder.menu_plus_button
-					.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							Editor edit = prefs.edit();
-							int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
-							Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
-							int cnt = prefs.getInt("count", 0);
-							if(ex_cart==0){
-								edit.putInt(getChild(groupP, childP), 1);
-								added_menu.add(getChild(groupP, childP));
-								cnt+=1;
-							}
-							else{
-								edit.putInt(getChild(groupP, childP), ex_cart+1);
-							}
-							edit.putInt("count", cnt);
-							edit.putStringSet("added_menu", added_menu);
-							edit.commit();
-							Toast.makeText(
-									v.getContext(),
-									getChild(groupP, childP)
-											+ "is added in cart\n" + "cnt = " + Integer.toString(cnt),
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-
 			v.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) v.getTag();
 		}
 
 		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition));
+		viewHolder.menu_plus_button
+		.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Editor edit = prefs.edit();
+				int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
+				Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
+				int cnt = prefs.getInt("count", 0);
+				if(ex_cart==0){
+					edit.putInt(getChild(groupP, childP), 1);
+					added_menu.add(getChild(groupP, childP));
+					cnt+=1;
+				}
+				else{
+					edit.putInt(getChild(groupP, childP), ex_cart+1);
+				}
+				edit.putInt("count", cnt);
+				edit.putStringSet("added_menu", added_menu);
+				edit.commit();
+				Toast.makeText(
+						v.getContext(),
+						getChild(groupP, childP)
+								+ "is added in cart\n" + "cnt = " + Integer.toString(cnt),
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 
 		return v;
 	}
