@@ -42,6 +42,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+        <ImageButton
+            android:id="@+id/call_button1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="0.5"
+            android:src="@drawable/cocktailor_call_button1"
+            />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -1,6 +1,9 @@
 package com.cs408.cocktailor_Activity;
 
 import java.io.UnsupportedEncodingException;
+
+import com.google.android.gcm.GCMRegistrar;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -25,7 +28,6 @@ public class NfcRead extends Activity {
 	private SharedPreferences prefs;
 	public static final String MIME_TEXT_PLAIN = "application/com.cs408.cocktailor";
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,7 +48,6 @@ public class NfcRead extends Activity {
 			handleIntent(getIntent());
 		}
 
-
 	}
 
 	@Override
@@ -64,7 +65,8 @@ public class NfcRead extends Activity {
 			if (type.contains(MIME_TEXT_PLAIN)) {
 				Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-				//Toast.makeText(NfcRead.this, "NFC is tagged!", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(NfcRead.this, "NFC is tagged!",
+				// Toast.LENGTH_SHORT).show();
 				new NdefReaderTask().execute(tag);
 
 			} else {
@@ -168,19 +170,38 @@ public class NfcRead extends Activity {
 
 			if (result != null) {
 				Intent intent = new Intent();
-				intent.setClass(getApplicationContext(),SplashScreen.class);
-				prefs=getSharedPreferences("from",Activity.MODE_PRIVATE);
+				intent.setClass(getApplicationContext(), SplashScreen.class);
+				prefs = getSharedPreferences("from", Activity.MODE_PRIVATE);
 				Editor edit = prefs.edit();
 				edit.putBoolean("NFC", true);
 				edit.commit();
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-				Log.e("my",result);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
+				Log.e("my", result);
+
+				registerGcm();
 				startActivity(intent);
-				
+
 				finish();
 			}
 		}
 
 	}
+	public void registerGcm() {
+
+		GCMRegistrar.checkDevice(this);
+		GCMRegistrar.checkManifest(this);
+
+		final String regId = GCMRegistrar.getRegistrationId(this);
+
+		if (regId.equals("")) {
+			GCMRegistrar.register(this, "1026088236239");
+			// Log.e("my","redID = " + GCMRegistrar.getRegistrationId(this));
+		} else {
+			Log.e("my", "regId = " + regId);
+		}
+	}
+
+	
 
 }

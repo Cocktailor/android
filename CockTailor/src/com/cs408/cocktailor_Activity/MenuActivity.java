@@ -2,9 +2,13 @@ package com.cs408.cocktailor_Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,6 +32,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.android.gcm.GCMRegistrar;
+
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -45,7 +52,18 @@ public class MenuActivity extends Activity {
 	private ArrayList<ArrayList<String>> mChildList = null;
 	private ArrayList<String> mChildListContent1 = null;
 	private BaseExpandableAdapter adapter;
+	private BluetoothService btService = null;
+	private final Handler mHandler = new Handler() {
 
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+		}
+
+	};
+
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +86,10 @@ public class MenuActivity extends Activity {
 
 		adapter = new BaseExpandableAdapter(this, mGroupList, mChildList);
 		mListView.setAdapter(adapter);
+
+		if (btService == null) {
+			btService = new BluetoothService(this, mHandler);
+		}
 
 		// 그룹 클릭 했을 경우 이벤트
 		mListView.setOnGroupClickListener(new OnGroupClickListener() {
@@ -126,13 +148,30 @@ public class MenuActivity extends Activity {
 			}
 		});
 
+		call_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), "call waiter",
+						Toast.LENGTH_SHORT).show();
+				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+				adapter.enable();
+
+				Intent discoverableIntent = new Intent(
+						BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+				discoverableIntent.putExtra(
+						BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+				startActivity(discoverableIntent);
+
+			}
+		});
+
 		(new Menu_receive())
 				.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
 		refresh_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				(new Menu_receive())
-				.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
+						.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
 			}
 		});
 	}
@@ -141,12 +180,13 @@ public class MenuActivity extends Activity {
 	 * Layout
 	 */
 	private ExpandableListView mListView;
-	private ImageButton cart_button, refresh_button;
+	private ImageButton cart_button, refresh_button, call_button;
 
 	private void setLayout() {
 		mListView = (ExpandableListView) findViewById(R.id.menu_list);
 		cart_button = (ImageButton) findViewById(R.id.order_button1);
 		refresh_button = (ImageButton) findViewById(R.id.refresh_button);
+		call_button = (ImageButton) findViewById(R.id.call_button1);
 	}
 
 	public class Menu_receive extends
@@ -178,61 +218,60 @@ public class MenuActivity extends Activity {
 			HashMap<Integer, ArrayList<String>> menu_storage = new HashMap<Integer, ArrayList<String>>();
 			ArrayList<String> menu1 = new ArrayList<String>();
 			ArrayList<String> menu2 = new ArrayList<String>();
-			
-			try{
+
+			try {
 				// (1)
-				HttpGet method = new HttpGet("http://cs408.kaist.ac.kr:4418/menu_receive");
+				HttpGet method = new HttpGet(
+						"http://cs408.kaist.ac.kr:4418/menu_receive");
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
 				// 헤더를 설정
-				//method.setHeader("Connection", "Keep-Alive");
+				// method.setHeader("Connection", "Keep-Alive");
 				// (3)
-				Log.d("asdf","JSON Receive");
+				Log.d("asdf", "JSON Receive");
 				HttpResponse response = client.execute(method);
 				// (4) response status 가 400 이 아니라면 ( 오류나면 )
 				int status = response.getStatusLine().getStatusCode();
-				if (status != HttpStatus.SC_OK){
-					Log.e("asdf","Connection is failed");
+				if (status != HttpStatus.SC_OK) {
+					Log.e("asdf", "Connection is failed");
 					throw new Exception(""); // 실패
 
-					
 				}
 				// (5) response 받기 JSONArray 로 파싱
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
 				JSONObject jsonObject = new JSONObject(str);
-				JSONArray category=jsonObject.getJSONArray("category");
+				JSONArray category = jsonObject.getJSONArray("category");
 				JSONArray cocktail_menu = jsonObject.getJSONArray("menu");
 				JSONObject temporary;
 
-				for(int i=0;i<cocktail_menu.length();i++){
+				for (int i = 0; i < cocktail_menu.length(); i++) {
 					temporary = cocktail_menu.getJSONObject(i);
 					int menu_id = temporary.getInt("category_id");
 					String menu_name = temporary.getString("name");
-					if(!menu_storage.containsKey(menu_id))
+					if (!menu_storage.containsKey(menu_id))
 						menu_storage.put(menu_id, new ArrayList<String>());
 					menu_storage.get(menu_id).add(menu_name);
 				}
-				
-				Set<Entry<Integer,ArrayList<String>>> set = menu_storage.entrySet();
+
+				Set<Entry<Integer, ArrayList<String>>> set = menu_storage
+						.entrySet();
 				Iterator<Entry<Integer, ArrayList<String>>> it = set.iterator();
-				
+
 				while (it.hasNext()) {
-					Map.Entry<Integer,ArrayList<String>> e = (Map.Entry<Integer,ArrayList<String>>)it.next();
+					Map.Entry<Integer, ArrayList<String>> e = (Map.Entry<Integer, ArrayList<String>>) it
+							.next();
 					detail_menu.add(e.getValue());
 
 				}
 				adapter.setChild(detail_menu);
-				
-				for(int i=0;i<category.length();i++){
+
+				for (int i = 0; i < category.length(); i++) {
 					result.add(category.getJSONObject(i).getString("name"));
 				}
 
-
-			}
-			catch (Exception e)
-			{
-				Log.e("asdf",e.getMessage());
+			} catch (Exception e) {
+				Log.e("asdf", e.getMessage());
 			}
 			return result;
 		}

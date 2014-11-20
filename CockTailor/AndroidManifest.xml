@@ -10,47 +10,63 @@
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission android:name="com.cs408.cocktailor_Activity.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.cs408.cocktailor_Activity.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/cocktailor_icon"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-        <activity
-            android:name="com.cs408.cocktailor_Activity.SplashScreen">
+        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        <activity android:name="com.cs408.cocktailor_Activity.SplashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <receiver
+            android:name="com.cs408.cocktailor_Activity.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.cs408.cocktailor_Activity" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.cs408.cocktailor_Service.GcmIntentService" />
+        
         <activity
             android:name="com.cs408.cocktailor_Activity.NFCWriter"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.cs408.cocktailor_Activity.MenuActivity"
-            android:launchMode="singleTop"
             android:excludeFromRecents="true"
-        />
-        <activity
-            android:name="com.cs408.cocktailor_Activity.CartActivity"
-        />
+            android:launchMode="singleTop" />
+        <activity android:name="com.cs408.cocktailor_Activity.CartActivity" />
         <activity
             android:name="com.cs408.cocktailor_Activity.NfcRead"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/com.cs408.cocktailor" /> 
-<!-- 앱 구분값을 mimeType 에 써줍니다 -->
+                <data android:mimeType="application/com.cs408.cocktailor" />
+                <!-- 앱 구분값을 mimeType 에 써줍니다 -->
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
-
         </activity>
     </application>
 
