@@ -89,7 +89,7 @@ public class CustomerFindReceiver extends BroadcastReceiver {
 
 			try {
 				HttpClient client = new DefaultHttpClient();
-				String postURL = "http://cs408.kaist.ac.kr:4418/ble_signal";
+				String postURL = "http://cs408.kaist.ac.kr:4418/api/ble_signal";
 				HttpPost post = new HttpPost(postURL);
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();

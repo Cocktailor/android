@@ -83,9 +83,9 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		}
 
 		if (isExpanded) {
-			viewHolder.iv_image.setBackgroundColor(Color.GREEN);
+			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow2);
 		} else {
-			viewHolder.iv_image.setBackgroundColor(Color.WHITE);
+			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow1);
 		}
 
 		viewHolder.tv_groupName.setText(getGroup(groupPosition));

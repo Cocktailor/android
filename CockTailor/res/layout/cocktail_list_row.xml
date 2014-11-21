@@ -20,7 +20,7 @@
     <NumberPicker
         android:id="@+id/number_picker1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:scaleX="0.4"
         android:scaleY="0.4"
         />    

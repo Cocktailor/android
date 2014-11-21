@@ -8,12 +8,19 @@
     <TextView
         android:name="@+id/call_receive_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="100dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="Table Number = 3" />
 
     <Button
         android:id="@+id/confirm_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:text="Confirm" />
 
 </LinearLayout>

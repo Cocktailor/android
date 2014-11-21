@@ -182,7 +182,7 @@ public class NfcRead extends Activity {
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.e("my", result);
 
-				registerGcm();
+				//registerGcm();
 				startActivity(intent);
 
 				finish();

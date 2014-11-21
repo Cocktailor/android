@@ -23,9 +23,7 @@ private SharedPreferences prefs;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.call_received);
-		TextView text = (TextView)findViewById(R.id.call_receive_text);
-		text.setText("Table number = " + "3");		
+		setContentView(R.layout.call_received);	
 		Button bt = (Button)findViewById(R.id.confirm_call);
 		bt.setOnClickListener(new OnClickListener(){
 
