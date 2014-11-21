@@ -1,16 +1,20 @@
 package com.cs408.cocktailor_Activity;
 
+
 import com.cs408.R;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-public class DetailViewActivity extends Activity{
+public class CallAlertActivity extends Activity{
 
 private SharedPreferences prefs;
 	
@@ -19,13 +23,19 @@ private SharedPreferences prefs;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.detail_menu);
-		Intent intent = getIntent();
-		String item = intent.getStringExtra("item");
-		TextView item_name = (TextView)findViewById(R.id.detail_view_name);
-		item_name.setText(item);
-		
-		
+		setContentView(R.layout.call_received);
+		TextView text = (TextView)findViewById(R.id.call_receive_text);
+		text.setText("Table number = " + "3");		
+		Button bt = (Button)findViewById(R.id.confirm_call);
+		bt.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+			
+		});
 	}
 
 	@Override

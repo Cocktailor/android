@@ -10,7 +10,7 @@
         android:maxWidth="100dp"
         android:minWidth="100dp"
         android:text="@string/textview_test"
-        android:textSize="15sp" />
+        android:textSize="22sp" />
 
     <RatingBar
         android:id="@+id/ratingBar1"
@@ -20,7 +20,9 @@
     <NumberPicker
         android:id="@+id/number_picker1"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
+        android:scaleX="0.4"
+        android:scaleY="0.4"
         />    
 
     <ImageButton

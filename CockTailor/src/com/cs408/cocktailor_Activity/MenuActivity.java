@@ -16,15 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -42,9 +33,6 @@ import org.json.JSONObject;
 
 import com.cs408.R;
 import com.cs408.cocktailor_Service.BluetoothService;
-import com.google.android.gcm.GCMRegistrar;
-
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -72,8 +60,6 @@ public class MenuActivity extends Activity {
 
 	};
 
-	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,6 +101,7 @@ public class MenuActivity extends Activity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
+
 				/*
 				 * Toast.makeText(getApplicationContext(), "c click = " +
 				 * childPosition, Toast.LENGTH_SHORT) .show();
@@ -199,9 +186,10 @@ public class MenuActivity extends Activity {
 		refresh_button = (ImageButton) findViewById(R.id.refresh_button);
 		call_button = (ImageButton) findViewById(R.id.call_button1);
 	}
-	
-	public class Call_waiter extends AsyncTask<String, Void, ArrayList<String>>{
-		private final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
+
+	public class Call_waiter extends AsyncTask<String, Void, ArrayList<String>> {
+		private final ProgressDialog dialog = new ProgressDialog(
+				MenuActivity.this);
 
 		@Override
 		protected void onPreExecute() {
@@ -209,40 +197,41 @@ public class MenuActivity extends Activity {
 			dialog.setMessage("Calling Waiter...");
 			dialog.show();
 		}
-		
+
 		@Override
 		protected void onPostExecute(ArrayList<String> result) {
 			super.onPostExecute(result);
 			dialog.dismiss();
 
 		}
-		
+
 		@Override
 		protected ArrayList<String> doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			
-			try
-			{
-			  HttpClient client = new DefaultHttpClient();  
-			  String postURL = "http://cs408.kaist.ac.kr:4418/call_waiter";
-			  HttpPost post = new HttpPost(postURL); 
-			 
-			  List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-			  parameters.add(new BasicNameValuePair("call", "waiter"));
-			 
-			  UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,HTTP.UTF_8);
-			  post.setEntity(ent);
-			  HttpResponse responsePOST = client.execute(post);  
-			  HttpEntity resEntity = responsePOST.getEntity();
-			 
-			  if (resEntity != null)
-			  {    
-			    Log.i("RESPONSE", EntityUtils.toString(resEntity));
-			  }
-			}
-			catch (Exception e)
-			{
-			  e.printStackTrace();
+
+			try {
+				HttpClient client = new DefaultHttpClient();
+				String postURL = "http://cs408.kaist.ac.kr:4418/api/call_waiter";
+				HttpPost post = new HttpPost(postURL);
+				
+				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+
+				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+				parameters.add(new BasicNameValuePair("ble_id", adapter.getAddress()));
+				parameters.add(new BasicNameValuePair("table", "3"));
+				
+
+				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
+						HTTP.UTF_8);
+				post.setEntity(ent);
+				HttpResponse responsePOST = client.execute(post);
+				HttpEntity resEntity = responsePOST.getEntity();
+
+				if (resEntity != null) {
+					Log.i("RESPONSE", EntityUtils.toString(resEntity));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return null;
 		}

@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="textview_test">Child</string>
     <string name="menu_receive">http://cs408.kaist.ac.kr:4418/menu_receive</string>
+    <string name="example_review">this was very great!!</string>
 
 </resources>

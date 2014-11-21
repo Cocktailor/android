@@ -9,6 +9,7 @@ import com.cs408.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,6 +124,10 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating = (RatingBar) v.findViewById(R.id.ratingBar1);
 			viewHolder.menu_plus_button = (ImageButton) v
 					.findViewById(R.id.menu_add_button1);
+			viewHolder.np = (NumberPicker)v.findViewById(R.id.number_picker1);
+			viewHolder.np.setMaxValue(10);
+	        viewHolder.np.setMinValue(0);
+	        viewHolder.np.setWrapSelectorWheel(false);
 
 			viewHolder.rating.setStepSize((float) 0.5); // 별 색깔이 1칸씩줄어들고 늘어남
 														// 0.5로하면 반칸씩 들어감
@@ -135,6 +141,20 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		}
 
 		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition));
+		viewHolder.tv_childName.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d("my","selected Item = " + getChild(groupP, childP));
+				//Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
+				Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
+				intent.putExtra("item", getChild(groupP, childP));
+				intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+				v.getContext().startActivity(intent);
+				
+			}
+		});
 		viewHolder.menu_plus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -179,6 +199,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		public ImageView iv_image;
 		public TextView tv_groupName;
 		public TextView tv_childName;
+		public NumberPicker np;
 		public RatingBar rating;
 		public ImageButton menu_plus_button;
 	}

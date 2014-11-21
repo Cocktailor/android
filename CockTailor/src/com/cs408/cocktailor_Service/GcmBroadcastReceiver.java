@@ -14,16 +14,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import com.google.android.gcm.GCMRegistrar;
+import com.cs408.cocktailor_Activity.CallAlertActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
@@ -33,10 +33,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
-	
+
 	private String regID;
 	private SharedPreferences prefs;
 	private String device_id;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.i("GcmBroadcastReceiver.java | onReceive", "|"
@@ -49,24 +50,38 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 							+ String.format("%s : %s (%s)", key, value
 									.toString(), value.getClass().getName())
 							+ "|");
-			
-			if(key.equals("registration_id")){
+
+			if (key.equals("registration_id")) {
 				regID = value.toString();
-				TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-				device_id = telephony.getDeviceId();    //device id
+				TelephonyManager telephony = (TelephonyManager) context
+						.getSystemService(Context.TELEPHONY_SERVICE);
+				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+				device_id = adapter.getAddress();
 				(new gcm_register()).execute("");
-			}
-			else if(key.equals("device_id")){
-				prefs=context.getSharedPreferences("customer", Activity.MODE_PRIVATE);
-				Editor edit=prefs.edit();
+			} else if (key.equals("ble_id")) {
+				prefs = context.getSharedPreferences("customer",
+						Activity.MODE_PRIVATE);
+				Editor edit = prefs.edit();
 				edit.putString("customer_device", value.toString());
-				edit.putBoolean("checked",false);
+				edit.putBoolean("checked", false);
 				edit.commit();
-				Log.d("my","gcm is arrived!!");
+				Log.d("my", "gcm is arrived!!");
 				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 				adapter.startDiscovery();
-				
-				
+
+			} else if (key.equals("table")) {
+				Bundle bun = new Bundle();
+				bun.putString("notiMessage", "test");
+
+				Intent popupIntent = new Intent(context, CallAlertActivity.class);
+
+				popupIntent.putExtras(bun);
+				PendingIntent pie= PendingIntent.getActivity(context, 0, popupIntent, PendingIntent.FLAG_ONE_SHOT);
+				try {
+				 pie.send();
+				} catch (CanceledException e) {
+				}
+
 			}
 		}
 		Log.i("GcmBroadcastReceiver.java | onReceive", "|"
@@ -76,7 +91,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 		ComponentName comp = new ComponentName(context.getPackageName(),
 				GCMIntentService.class.getName());
 		// Start the service, keeping the device awake while it is launching.
-		//startWakefulService(context, intent.setComponent(comp));
+		// startWakefulService(context, intent.setComponent(comp));
 		setResultCode(Activity.RESULT_OK);
 	}
 
@@ -112,17 +127,15 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 						HTTP.UTF_8);
 				post.setEntity(ent);
 				HttpResponse responsePOST = client.execute(post);
-				
+
 				HttpEntity resEntity = responsePOST.getEntity();
-				
-				
 
 				Log.e("my", "redID = " + regID);
 				if (resEntity != null) {
 					Log.i("RESPONSE", EntityUtils.toString(resEntity));
 				}
 			} catch (Exception e) {
-				
+
 				Log.e("my", "POST ERROR ");
 				e.printStackTrace();
 			}
