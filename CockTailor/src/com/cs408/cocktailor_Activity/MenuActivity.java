@@ -212,13 +212,13 @@ public class MenuActivity extends Activity {
 				HttpClient client = new DefaultHttpClient();
 				String postURL = "http://cs408.kaist.ac.kr:4418/api/call_waiter";
 				HttpPost post = new HttpPost(postURL);
-				
+
 				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-				parameters.add(new BasicNameValuePair("ble_id", adapter.getAddress()));
+				parameters.add(new BasicNameValuePair("ble_id", adapter
+						.getAddress()));
 				parameters.add(new BasicNameValuePair("table", "3"));
-				
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);

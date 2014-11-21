@@ -1,6 +1,8 @@
 package com.cs408.cocktailor_Activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -170,8 +172,13 @@ public class CartActivity extends Activity {
 				Editor edit = prefs.edit();
 				edit.clear();
 				edit.commit();
+				
+				Date d = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
+				
 				parameters.add(new BasicNameValuePair("table", "3"));
 				parameters.add(new BasicNameValuePair("price", "1111"));
+				parameters.add(new BasicNameValuePair("time", sdf.format(d)));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);
