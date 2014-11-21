@@ -4,9 +4,11 @@ package com.cs408.cocktailor_Activity;
 import com.cs408.R;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -25,10 +27,14 @@ private SharedPreferences prefs;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.call_received);	
 		Button bt = (Button)findViewById(R.id.confirm_call);
+		long[] pattern = {100, 200};
+		final Vibrator m_vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		m_vibrator.vibrate(pattern, 1);
 		bt.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
+				m_vibrator.cancel();
 				// TODO Auto-generated method stub
 				finish();
 			}

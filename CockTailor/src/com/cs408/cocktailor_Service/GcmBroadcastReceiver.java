@@ -72,6 +72,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 			} else if (key.equals("table")) {
 				Bundle bun = new Bundle();
 				bun.putString("notiMessage", "test");
+				 
 
 				Intent popupIntent = new Intent(context, CallAlertActivity.class);
 
@@ -100,7 +101,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
 		@Override
 		protected void onPreExecute() {
-			super.onPreExecute();
+			super.onPreExecute(); 
 		}
 
 		@Override

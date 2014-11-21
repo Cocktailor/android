@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/cart_list_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:maxWidth="170dp"
+        android:minWidth="170dp"
+        android:text="Menu" />
+
+    <TextView
+        android:id="@+id/cart_list_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="am"
+        android:maxWidth="30dp"
+        android:minWidth="30dp"
+        android:textSize="15sp" />
+
+    <ImageButton
+        android:id="@+id/cart_plus_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="#00000000"
+        android:src="@drawable/menu_plus_button" />
+
+    <ImageButton
+        android:id="@+id/cart_minus_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="#00000000"
+        android:src="@drawable/menu_plus_button" />
+
+</LinearLayout>
