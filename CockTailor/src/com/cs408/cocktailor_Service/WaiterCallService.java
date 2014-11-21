@@ -54,11 +54,9 @@ public class WaiterCallService extends Service {
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 		adapter.enable();
 		
-		adapter.startDiscovery();
 		
-		BroadcastReceiver mReceiver = new CustomerFindReceiver();
-		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND); 
-		registerReceiver(mReceiver, filter);
+		
+		
 		
 		return START_STICKY;
 		// return super.onStartCommand(intent, flags, startId);

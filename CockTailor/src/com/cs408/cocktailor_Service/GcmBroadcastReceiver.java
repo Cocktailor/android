@@ -17,10 +17,15 @@ import org.apache.http.util.EntityUtils;
 import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -51,8 +56,18 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 				device_id = telephony.getDeviceId();    //device id
 				(new gcm_register()).execute("");
 			}
-			else{
+			else if(key.equals("device_id")){
 				prefs=context.getSharedPreferences("customer", Activity.MODE_PRIVATE);
+				Editor edit=prefs.edit();
+				edit.putString("customer_device", value.toString());
+				edit.commit();
+				Log.d("my","gcm is arrived!!");
+				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+				adapter.startDiscovery();
+				
+				BroadcastReceiver mReceiver = new CustomerFindReceiver();
+				IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND); 
+				context.registerReceiver(mReceiver, filter);
 				
 				
 			}
@@ -88,12 +103,13 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
 			try {
 				HttpClient client = new DefaultHttpClient();
-				String postURL = "http://cs408.kaist.ac.kr:4418/api/regid";
+				String postURL = "http://cs408.kaist.ac.kr:4418/api/register_user";
 				HttpPost post = new HttpPost(postURL);
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-				parameters.add(new BasicNameValuePair("regid", regID));
-				parameters.add(new BasicNameValuePair("deviceid", device_id));
+				parameters.add(new BasicNameValuePair("reg_id", regID));
+				parameters.add(new BasicNameValuePair("device_id", device_id));
+				parameters.add(new BasicNameValuePair("iswaiter", "Y"));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);
