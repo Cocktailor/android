@@ -54,6 +54,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop" />
         <activity android:name="com.cs408.cocktailor_Activity.CartActivity" />
+        <activity android:name="com.cs408.cocktailor_Activity.DetailViewActivity"/>
         
         <service android:name="com.cs408.cocktailor_Service.WaiterCallService"/>
         <activity

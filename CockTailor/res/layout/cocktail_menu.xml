@@ -47,6 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:background="#00000000"
             android:layout_weight="0.5"
             android:src="@drawable/cocktailor_call_button1"
             />
@@ -61,6 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:background="#00000000"
             android:layout_weight="0.5"
             android:src="@drawable/cocktailor_cart_button1" />
     </LinearLayout>
