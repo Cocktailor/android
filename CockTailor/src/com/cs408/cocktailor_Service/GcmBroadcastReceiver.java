@@ -60,14 +60,11 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 				prefs=context.getSharedPreferences("customer", Activity.MODE_PRIVATE);
 				Editor edit=prefs.edit();
 				edit.putString("customer_device", value.toString());
+				edit.putBoolean("checked",false);
 				edit.commit();
 				Log.d("my","gcm is arrived!!");
 				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 				adapter.startDiscovery();
-				
-				BroadcastReceiver mReceiver = new CustomerFindReceiver();
-				IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND); 
-				context.registerReceiver(mReceiver, filter);
 				
 				
 			}
@@ -79,7 +76,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 		ComponentName comp = new ComponentName(context.getPackageName(),
 				GCMIntentService.class.getName());
 		// Start the service, keeping the device awake while it is launching.
-		startWakefulService(context, intent.setComponent(comp));
+		//startWakefulService(context, intent.setComponent(comp));
 		setResultCode(Activity.RESULT_OK);
 	}
 

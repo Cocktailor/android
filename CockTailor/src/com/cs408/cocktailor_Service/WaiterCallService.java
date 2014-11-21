@@ -30,7 +30,7 @@ public class WaiterCallService extends Service {
 			GCMRegistrar.register(this, "1026088236239");
 			// Log.e("my","redID = " + GCMRegistrar.getRegistrationId(this));
 		} else {
-			Log.e("my", "regId = " + regId);
+			//Log.e("my", "regId = " + regId);
 		}
 	}
 	
@@ -38,6 +38,7 @@ public class WaiterCallService extends Service {
 	public void onCreate() {
 		Toast.makeText(this, "Waiter Service is created", 1).show();
 		registerGcm();
+		
 		super.onCreate();
 
 	}
@@ -54,7 +55,11 @@ public class WaiterCallService extends Service {
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 		adapter.enable();
 		
+
 		
+		BroadcastReceiver mReceiver = new CustomerFindReceiver();
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND); 
+		registerReceiver(mReceiver, filter);
 		
 		
 		
@@ -65,6 +70,13 @@ public class WaiterCallService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+		adapter.disable();
+		
+
+		
+		BroadcastReceiver mReceiver = new CustomerFindReceiver();
+		unregisterReceiver(mReceiver);
 		Toast.makeText(this, "¼­ºñ½º onDestro", 1).show();
 	}
 	

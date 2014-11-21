@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -47,14 +48,19 @@ public class CustomerFindReceiver extends BroadcastReceiver {
 			Log.d("customer", device.getName() + "\n" + device.getAddress());
 			Log.d("customer", "Signal = " + Short.toString(rssi));
 			prefs=context.getSharedPreferences("customer", Activity.MODE_PRIVATE);
-			if (device.getAddress().equals(prefs.getString("customer_device", ""))) {
+			Log.e("my","customer_device = " + prefs.getString("customer_device",""));
+			Log.e("my","check = " + prefs.getBoolean("checked", true));
+			if (device.getAddress().contains(prefs.getString("customer_device", ""))
+					&& !prefs.getBoolean("checked", true)) {
 				Log.i("my", "customer find!!  Signal = " + Short.toString(rssi));
+				Editor edit=prefs.edit();
+				edit.putBoolean("checked", true);
+				edit.commit();
 				
 				TelephonyManager telephony = (TelephonyManager) context
 						.getSystemService(Context.TELEPHONY_SERVICE);
 				device_id = telephony.getDeviceId();
 				(new send_signal_strength()).execute(Short.toString(rssi));
-				context.unregisterReceiver(this);
 			}
 
 		}
