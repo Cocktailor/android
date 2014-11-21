@@ -12,6 +12,14 @@
         android:background="@drawable/cocktailor_theme"
         android:orientation="horizontal" >
 
+        <ImageButton
+            android:id="@+id/cart_back_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            android:src="@drawable/cocktailor_back1" />
+
     </LinearLayout>
 
     <ListView

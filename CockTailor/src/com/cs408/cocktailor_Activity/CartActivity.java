@@ -31,9 +31,10 @@ import android.widget.*;
 public class CartActivity extends Activity {
 
 	private SharedPreferences prefs;
-
+	private ImageButton back_button;
 	private ListView addedListView;
 	private ImageButton order_button;
+	ArrayList<Added_Menu> menus = new ArrayList<Added_Menu>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +43,13 @@ public class CartActivity extends Activity {
 		this.prefs = getSharedPreferences("cart", Activity.MODE_PRIVATE);
 
 		addedListView = (ListView) findViewById(R.id.cart_added_menu);
+		back_button = (ImageButton) findViewById(R.id.cart_back_button);
 		order_button = (ImageButton) findViewById(R.id.cart_order_button);
 
 		Set<String> added_menu = prefs.getStringSet("added_menu",
 				new HashSet<String>());
 
-		ArrayList<Added_Menu> menus = new ArrayList<Added_Menu>();
+		
 		int cnt = prefs.getInt("count", 0);
 		for (Object o : added_menu.toArray()) {
 			Added_Menu tempMenu = new Added_Menu();
@@ -55,17 +57,23 @@ public class CartActivity extends Activity {
 			tempMenu.amount = prefs.getInt(tempMenu.menu, 0);
 			menus.add(tempMenu);
 		}
-		order_button.setOnClickListener(new OnClickListener(){
+		back_button.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		order_button.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
-				
+
 				(new send_order()).execute("");
 				finish();
 			}
-			
+
 		});
 
 		CartListAdapter adapter = new CartListAdapter(this, R.layout.cart_list,
@@ -106,10 +114,20 @@ public class CartActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		Editor edit = prefs.edit();
+		int tempcnt;
+		int cnt = prefs.getInt("count", 0);
+		for(Added_Menu am:menus){
+			tempcnt = prefs.getInt(am.menu, 0);
+			if(tempcnt == 0){
+				edit.remove(am.menu);
+				edit.putInt("count", cnt--);
+				edit.commit();
+			}
+		}
 	}
 
-	public class send_order extends
-			AsyncTask<String, Void, ArrayList<String>> {
+	public class send_order extends AsyncTask<String, Void, ArrayList<String>> {
 
 		@Override
 		protected void onPreExecute() {
@@ -132,21 +150,23 @@ public class CartActivity extends Activity {
 				HttpPost post = new HttpPost(postURL);
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-				SharedPreferences prefs = getSharedPreferences("cart", Activity.MODE_PRIVATE);
+				SharedPreferences prefs = getSharedPreferences("cart",
+						Activity.MODE_PRIVATE);
 				Set<String> added_menu = prefs.getStringSet("added_menu",
 						new HashSet<String>());
-				String post_string="";
+				String post_string = "";
 
 				for (Object o : added_menu.toArray()) {
 					Added_Menu tempMenu = new Added_Menu();
 					tempMenu.menu = o.toString();
 					tempMenu.amount = prefs.getInt(tempMenu.menu, 0);
-					post_string+=o.toString() + " X " + Integer.toString(tempMenu.amount) + "/";
+					post_string += o.toString() + " X "
+							+ Integer.toString(tempMenu.amount) + " / ";
 				}
-				
-				
-				parameters.add(new BasicNameValuePair("order_content", post_string));
-				Log.e("my",post_string);
+
+				parameters.add(new BasicNameValuePair("order_content",
+						post_string.substring(0, post_string.length() - 3)));
+				Log.e("my", post_string.substring(0, post_string.length() - 3));
 				Editor edit = prefs.edit();
 				edit.clear();
 				edit.commit();

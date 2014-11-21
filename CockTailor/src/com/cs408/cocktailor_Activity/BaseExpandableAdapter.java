@@ -147,8 +147,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Log.d("my","selected Item = " + getChild(groupP, childP));
-				//Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
-				Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
+				Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
+				//Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
 				intent.putExtra("item", getChild(groupP, childP));
 				intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 				v.getContext().startActivity(intent);
