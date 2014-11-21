@@ -2,6 +2,7 @@ package com.cs408.cocktailor_Activity;
 
 import java.io.UnsupportedEncodingException;
 
+import com.cs408.cocktailor_Service.WaiterCallService;
 import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
@@ -168,12 +169,14 @@ public class NfcRead extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			if (result != null) {
+			prefs = getSharedPreferences("from", Activity.MODE_PRIVATE);
+			Editor edit = prefs.edit();
+			if (result.equals("customer")) {
 				Intent intent = new Intent();
 				intent.setClass(getApplicationContext(), SplashScreen.class);
-				prefs = getSharedPreferences("from", Activity.MODE_PRIVATE);
-				Editor edit = prefs.edit();
+
 				edit.putBoolean("NFC", true);
+				edit.putString("who", "customer");
 				edit.commit();
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -183,10 +186,19 @@ public class NfcRead extends Activity {
 				startActivity(intent);
 
 				finish();
+			} else if (result.equals("waiter")) {
+				Log.e("my", "waiter mode");
+				Intent service = new Intent(getApplicationContext(),
+						WaiterCallService.class);
+				startService(service);
+				edit.putBoolean("NFC", true);
+				edit.putString("who", "waiter");
+				finish();
 			}
 		}
 
 	}
+
 	public void registerGcm() {
 
 		GCMRegistrar.checkDevice(this);
@@ -201,7 +213,5 @@ public class NfcRead extends Activity {
 			Log.e("my", "regId = " + regId);
 		}
 	}
-
-	
 
 }

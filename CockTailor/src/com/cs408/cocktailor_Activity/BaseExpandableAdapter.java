@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.cs408.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cs408.cocktailor_Activity"
+    package="com.cs408"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -11,14 +11,15 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:name="com.cs408.cocktailor_Activity.permission.C2D_MESSAGE"
+    <permission android:name="com.cs408.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.cs408.cocktailor_Activity.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.cs408.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
@@ -34,12 +35,12 @@
         </activity>
         
         <receiver
-            android:name="com.cs408.cocktailor_Activity.GcmBroadcastReceiver"
+            android:name="com.cs408.cocktailor_Service.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.cs408.cocktailor_Activity" />
+                <category android:name="com.cs408" />
             </intent-filter>
         </receiver>
         <service android:name="com.cs408.cocktailor_Service.GcmIntentService" />
@@ -53,6 +54,8 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop" />
         <activity android:name="com.cs408.cocktailor_Activity.CartActivity" />
+        
+        <service android:name="com.cs408.cocktailor_Service.WaiterCallService"/>
         <activity
             android:name="com.cs408.cocktailor_Activity.NfcRead"
             android:launchMode="singleInstance" >

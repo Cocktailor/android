@@ -2,6 +2,8 @@ package com.cs408.cocktailor_Activity;
 
 import java.util.Set;
 
+import com.cs408.R;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;

@@ -12,6 +12,7 @@ import android.os.Message;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -24,14 +25,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.cs408.R;
+import com.cs408.cocktailor_Service.BluetoothService;
 import com.google.android.gcm.GCMRegistrar;
 
 
@@ -161,6 +171,7 @@ public class MenuActivity extends Activity {
 				discoverableIntent.putExtra(
 						BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
 				startActivity(discoverableIntent);
+				(new Call_waiter()).execute("");
 
 			}
 		});
@@ -187,6 +198,54 @@ public class MenuActivity extends Activity {
 		cart_button = (ImageButton) findViewById(R.id.order_button1);
 		refresh_button = (ImageButton) findViewById(R.id.refresh_button);
 		call_button = (ImageButton) findViewById(R.id.call_button1);
+	}
+	
+	public class Call_waiter extends AsyncTask<String, Void, ArrayList<String>>{
+		private final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog.setMessage("Calling Waiter...");
+			dialog.show();
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<String> result) {
+			super.onPostExecute(result);
+			dialog.dismiss();
+
+		}
+		
+		@Override
+		protected ArrayList<String> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			
+			try
+			{
+			  HttpClient client = new DefaultHttpClient();  
+			  String postURL = "http://cs408.kaist.ac.kr:4418/call_waiter";
+			  HttpPost post = new HttpPost(postURL); 
+			 
+			  List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+			  parameters.add(new BasicNameValuePair("call", "waiter"));
+			 
+			  UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,HTTP.UTF_8);
+			  post.setEntity(ent);
+			  HttpResponse responsePOST = client.execute(post);  
+			  HttpEntity resEntity = responsePOST.getEntity();
+			 
+			  if (resEntity != null)
+			  {    
+			    Log.i("RESPONSE", EntityUtils.toString(resEntity));
+			  }
+			}
+			catch (Exception e)
+			{
+			  e.printStackTrace();
+			}
+			return null;
+		}
 	}
 
 	public class Menu_receive extends

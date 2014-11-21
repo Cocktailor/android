@@ -1,4 +1,4 @@
-package com.cs408.cocktailor_Activity;
+package com.cs408.cocktailor_Service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,7 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.cs408.cocktailor_Activity.R;
+import com.cs408.R;
+import com.cs408.cocktailor_Activity.MenuActivity;
 import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService {
