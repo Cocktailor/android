@@ -296,6 +296,14 @@ public class MenuActivity extends Activity {
 					temporary = cocktail_menu.getJSONObject(i);
 					int menu_id = temporary.getInt("category_id");
 					String menu_name = temporary.getString("name");
+					int price = temporary.getInt("price");
+					String pic_link = temporary.getString("picture");
+					String description = temporary.getString("description");
+					Detail_Information di = new Detail_Information();
+					di.description = description;
+					di.menu_name = menu_name;
+					di.price=price;
+					di.pic_link = pic_link;
 					if (!menu_storage.containsKey(menu_id))
 						menu_storage.put(menu_id, new ArrayList<String>());
 					menu_storage.get(menu_id).add(menu_name);

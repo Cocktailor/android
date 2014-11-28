@@ -177,7 +177,7 @@ public class CartActivity extends Activity {
 				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
 				
 				parameters.add(new BasicNameValuePair("table", "3"));
-				parameters.add(new BasicNameValuePair("price", "1111"));
+				parameters.add(new BasicNameValuePair("price", "19000"));
 				parameters.add(new BasicNameValuePair("time", sdf.format(d)));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,

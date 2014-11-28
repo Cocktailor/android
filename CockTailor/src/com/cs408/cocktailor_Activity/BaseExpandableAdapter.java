@@ -124,10 +124,10 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating = (RatingBar) v.findViewById(R.id.ratingBar1);
 			viewHolder.menu_plus_button = (ImageButton) v
 					.findViewById(R.id.menu_add_button1);
-			viewHolder.np = (NumberPicker)v.findViewById(R.id.number_picker1);
-			viewHolder.np.setMaxValue(10);
-	        viewHolder.np.setMinValue(0);
-	        viewHolder.np.setWrapSelectorWheel(false);
+			//viewHolder.np = (NumberPicker)v.findViewById(R.id.number_picker1);
+			//viewHolder.np.setMaxValue(10);
+	        //viewHolder.np.setMinValue(0);
+	        //viewHolder.np.setWrapSelectorWheel(false);
 
 			viewHolder.rating.setStepSize((float) 0.5); // 별 색깔이 1칸씩줄어들고 늘어남
 														// 0.5로하면 반칸씩 들어감
