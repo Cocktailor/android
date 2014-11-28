@@ -1,29 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/tv_child"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="100dp"
-        android:minWidth="100dp"
-        android:text="@string/textview_test"
-        android:textSize="22sp" />
-
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/child_thumbnail"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/cocktailor_x1" />
 
     <ImageButton
         android:id="@+id/menu_add_button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#00000000"
-        android:src="@drawable/menu_plus_button" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ratingBar1"
+        android:background="#00ff0000"
+        android:src="@drawable/cocktailor_plus" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/menu_minus_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/menu_add_button1"
+        android:layout_toLeftOf="@+id/counting"
+        android:background="#00ff0000"
+        android:src="@drawable/cocktailor_minus" />
+
+    <TextView
+        android:id="@+id/counting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/menu_add_button1"
+        android:layout_toLeftOf="@+id/menu_add_button1"
+        android:text="0"
+        android:textSize="15sp" />
+
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/menu_minus_button1" />
+
+    <TextView
+        android:id="@+id/tv_child"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/menu_minus_button1"
+        android:layout_toRightOf="@+id/child_thumbnail"
+        android:maxWidth="100dp"
+        android:minWidth="100dp"
+        android:text="@string/textview_test"
+        android:textSize="18sp" />
+
+</RelativeLayout>

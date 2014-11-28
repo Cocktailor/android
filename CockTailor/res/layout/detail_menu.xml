@@ -21,9 +21,9 @@
         <ImageButton
             android:id="@+id/detail_view_close"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="#00000000"
+            android:background="@android:color/transparent"
             android:src="@drawable/cocktailor_x1" />
     </LinearLayout>
 
@@ -55,25 +55,35 @@
 
         <ImageView
             android:id="@+id/menu_thumbnail"
-            android:layout_width="wrap_content"
+            android:layout_width="200sp"
             android:layout_gravity="center"
-            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:layout_height="200sp"
             android:src = "@drawable/cocktailor_plus" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-         <RatingBar
-            android:id="@+id/ratingBar3"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
          <TextView
-            android:id="@+id/detail_view_review"
+            android:id="@+id/description_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/example_review"
+            android:textSize="22sp"
+            android:text="@string/description"
+            android:background="#00000000" />
+        
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+         <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:paddingTop="10dp"
+            android:textColor="#FF888888"
+            android:text="@string/description"
             android:background="#00000000" />
         
     </LinearLayout>

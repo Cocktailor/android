@@ -15,7 +15,6 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Group"
             android:textSize="15sp" />
         <View
             android:layout_width="0dp"
@@ -45,7 +44,7 @@
         android:orientation="horizontal" >
         <ImageButton
             android:id="@+id/call_button1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="#00000000"
@@ -60,7 +59,7 @@
 
         <ImageButton
             android:id="@+id/order_button1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="#00000000"

@@ -1,10 +1,15 @@
 package com.cs408.cocktailor_Activity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.cs408.R;
+import com.cs408.cocktailor_Service.ImageLoader;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,7 +17,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,32 +35,37 @@ import android.widget.Toast;
 
 public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
-	private ArrayList<String> groupList = null;
-	private ArrayList<ArrayList<String>> childList = null;
+	private ArrayList<Detail_Information> groupList = null;
+	private ArrayList<ArrayList<Detail_Information>> childList = null;
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
 	private SharedPreferences prefs;
+	private ImageView thumbnail;
+	private Context mContext;
+	Bitmap bmimg;
 
-	public BaseExpandableAdapter(Context c, ArrayList<String> groupList,
-			ArrayList<ArrayList<String>> childList) {
+	public BaseExpandableAdapter(Context c, ArrayList<Detail_Information> groupList,
+			ArrayList<ArrayList<Detail_Information>> childList) {
 		super();
 		this.inflater = LayoutInflater.from(c);
+		
+		this.mContext = c;
 
 		this.prefs = c.getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
 		this.groupList = groupList;
 		this.childList = childList;
 	}
 
-	public void setGroup(ArrayList<String> groupList) {
+	public void setGroup(ArrayList<Detail_Information> groupList) {
 		this.groupList = groupList;
 	}
 
-	public void setChild(ArrayList<ArrayList<String>> childList) {
+	public void setChild(ArrayList<ArrayList<Detail_Information>> childList) {
 		this.childList = childList;
 	}
 
 	@Override
-	public String getGroup(int groupPosition) {
+	public Detail_Information getGroup(int groupPosition) {
 		return groupList.get(groupPosition);
 	}
 
@@ -88,13 +101,13 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow1);
 		}
 
-		viewHolder.tv_groupName.setText(getGroup(groupPosition));
+		viewHolder.tv_groupName.setText(getGroup(groupPosition).menu_name);
 
 		return v;
 	}
 
 	@Override
-	public String getChild(int groupPosition, int childPosition) {
+	public Detail_Information getChild(int groupPosition, int childPosition) {
 		return childList.get(groupPosition).get(childPosition);
 	}
 
@@ -124,6 +137,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating = (RatingBar) v.findViewById(R.id.ratingBar1);
 			viewHolder.menu_plus_button = (ImageButton) v
 					.findViewById(R.id.menu_add_button1);
+			viewHolder.menu_minus_button = (ImageButton) v
+					.findViewById(R.id.menu_minus_button1);
+			viewHolder.thumbnail = (ImageView) v.findViewById(R.id.child_thumbnail);
+			viewHolder.count = (TextView)v.findViewById(R.id.counting);
+			
+			
 			//viewHolder.np = (NumberPicker)v.findViewById(R.id.number_picker1);
 			//viewHolder.np.setMaxValue(10);
 	        //viewHolder.np.setMinValue(0);
@@ -134,13 +153,20 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating.setRating((float) 4.5); // 처음보여줄때(색깔이 한개도없음)
 														// default 값이 0 이다
 			viewHolder.rating.setIsIndicator(true);
+			
 
 			v.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) v.getTag();
 		}
 
-		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition));
+		thumbnail = viewHolder.thumbnail;
+
+		ImageLoader imageloader = new ImageLoader(this.mContext);
+		
+		imageloader.DisplayImage("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link, thumbnail);
+		//(new image_receive()).execute("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link);
+		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition).menu_name);
 		viewHolder.tv_childName.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -149,7 +175,10 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				Log.d("my","selected Item = " + getChild(groupP, childP));
 				Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
 				//Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
-				intent.putExtra("item", getChild(groupP, childP));
+				intent.putExtra("item", getChild(groupP, childP).menu_name);
+				intent.putExtra("pic_link", getChild(groupP, childP).pic_link);
+				intent.putExtra("price", getChild(groupP, childP).price);
+				intent.putExtra("description", getChild(groupP, childP).description);
 				intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 				v.getContext().startActivity(intent);
 				
@@ -160,16 +189,16 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				Editor edit = prefs.edit();
-				int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
+				int ex_cart = prefs.getInt(getChild(groupP, childP).menu_name, 0);//카트에 추가돼있는 메뉴들
 				Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
 				int cnt = prefs.getInt("count", 0);
 				if(ex_cart==0){
-					edit.putInt(getChild(groupP, childP), 1);
-					added_menu.add(getChild(groupP, childP));
+					edit.putInt(getChild(groupP, childP).menu_name, 1);
+					added_menu.add(getChild(groupP, childP).menu_name);
 					cnt+=1;
 				}
 				else{
-					edit.putInt(getChild(groupP, childP), ex_cart+1);
+					edit.putInt(getChild(groupP, childP).menu_name, ex_cart+1);
 				}
 				edit.putInt("count", cnt);
 				edit.putStringSet("added_menu", added_menu);
@@ -196,12 +225,40 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 	}
 
 	class ViewHolder {
-		public ImageView iv_image;
+		public ImageView iv_image, thumbnail;
 		public TextView tv_groupName;
-		public TextView tv_childName;
+		public TextView tv_childName,count;
 		public NumberPicker np;
 		public RatingBar rating;
-		public ImageButton menu_plus_button;
+		public ImageButton menu_plus_button,menu_minus_button;
+	}
+	
+	private class image_receive extends AsyncTask<String, Integer, Bitmap> {
+
+		@Override
+		protected Bitmap doInBackground(String... urls) {
+			// TODO Auto-generated method stub
+			try {
+				URL myFileUrl = new URL(urls[0]);
+				HttpURLConnection conn = (HttpURLConnection) myFileUrl
+						.openConnection();
+				conn.setDoInput(true);
+				conn.connect();
+
+				InputStream is = conn.getInputStream();
+
+				bmimg = BitmapFactory.decodeStream(is);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return bmimg;
+		}
+
+		protected void onPostExecute(Bitmap img) {
+			thumbnail.setImageBitmap(img);
+		}
+
 	}
 
 }
