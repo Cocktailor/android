@@ -37,9 +37,11 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 	private String regID;
 	private SharedPreferences prefs;
 	private String device_id;
+	Context Gcontext;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Gcontext = context;
 		Log.i("GcmBroadcastReceiver.java | onReceive", "|"
 				+ "=================" + "|");
 		Bundle bundle = intent.getExtras();
@@ -123,6 +125,11 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 				parameters.add(new BasicNameValuePair("reg_id", regID));
 				parameters.add(new BasicNameValuePair("device_id", device_id));
 				parameters.add(new BasicNameValuePair("iswaiter", "Y"));
+				
+				prefs = Gcontext.getSharedPreferences("waiter", Activity.MODE_PRIVATE);
+				String waiter_name = prefs.getString("waiter_name", "default");
+				parameters.add(new BasicNameValuePair("waiter_name", waiter_name));
+				Log.e("my", waiter_name);
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);
