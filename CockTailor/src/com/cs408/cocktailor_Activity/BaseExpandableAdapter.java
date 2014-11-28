@@ -27,14 +27,14 @@ import android.widget.Toast;
 
 public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
-	private ArrayList<String> groupList = null;
-	private ArrayList<ArrayList<String>> childList = null;
+	private ArrayList<Detail_Information> groupList = null;
+	private ArrayList<ArrayList<Detail_Information>> childList = null;
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
 	private SharedPreferences prefs;
 
-	public BaseExpandableAdapter(Context c, ArrayList<String> groupList,
-			ArrayList<ArrayList<String>> childList) {
+	public BaseExpandableAdapter(Context c, ArrayList<Detail_Information> groupList,
+			ArrayList<ArrayList<Detail_Information>> childList) {
 		super();
 		this.inflater = LayoutInflater.from(c);
 
@@ -43,16 +43,16 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		this.childList = childList;
 	}
 
-	public void setGroup(ArrayList<String> groupList) {
+	public void setGroup(ArrayList<Detail_Information> groupList) {
 		this.groupList = groupList;
 	}
 
-	public void setChild(ArrayList<ArrayList<String>> childList) {
+	public void setChild(ArrayList<ArrayList<Detail_Information>> childList) {
 		this.childList = childList;
 	}
 
 	@Override
-	public String getGroup(int groupPosition) {
+	public Detail_Information getGroup(int groupPosition) {
 		return groupList.get(groupPosition);
 	}
 
@@ -88,13 +88,13 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow1);
 		}
 
-		viewHolder.tv_groupName.setText(getGroup(groupPosition));
+		viewHolder.tv_groupName.setText(getGroup(groupPosition).menu_name);
 
 		return v;
 	}
 
 	@Override
-	public String getChild(int groupPosition, int childPosition) {
+	public Detail_Information getChild(int groupPosition, int childPosition) {
 		return childList.get(groupPosition).get(childPosition);
 	}
 
@@ -140,7 +140,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder = (ViewHolder) v.getTag();
 		}
 
-		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition));
+		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition).menu_name);
 		viewHolder.tv_childName.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -149,7 +149,10 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				Log.d("my","selected Item = " + getChild(groupP, childP));
 				Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
 				//Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
-				intent.putExtra("item", getChild(groupP, childP));
+				intent.putExtra("item", getChild(groupP, childP).menu_name);
+				intent.putExtra("pic_link", getChild(groupP, childP).pic_link);
+				intent.putExtra("price", getChild(groupP, childP).price);
+				intent.putExtra("description", getChild(groupP, childP).description);
 				intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 				v.getContext().startActivity(intent);
 				
@@ -160,16 +163,16 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				Editor edit = prefs.edit();
-				int ex_cart = prefs.getInt(getChild(groupP, childP), 0);//카트에 추가돼있는 메뉴들
+				int ex_cart = prefs.getInt(getChild(groupP, childP).menu_name, 0);//카트에 추가돼있는 메뉴들
 				Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
 				int cnt = prefs.getInt("count", 0);
 				if(ex_cart==0){
-					edit.putInt(getChild(groupP, childP), 1);
-					added_menu.add(getChild(groupP, childP));
+					edit.putInt(getChild(groupP, childP).menu_name, 1);
+					added_menu.add(getChild(groupP, childP).menu_name);
 					cnt+=1;
 				}
 				else{
-					edit.putInt(getChild(groupP, childP), ex_cart+1);
+					edit.putInt(getChild(groupP, childP).menu_name, ex_cart+1);
 				}
 				edit.putInt("count", cnt);
 				edit.putStringSet("added_menu", added_menu);

@@ -45,10 +45,10 @@ import android.widget.Toast;
 
 public class MenuActivity extends Activity {
 
-	private ArrayList<String> mGroupList = null;
-	private ArrayList<String> list = new ArrayList<String>();
-	private ArrayList<ArrayList<String>> mChildList = null;
-	private ArrayList<String> mChildListContent1 = null;
+	private ArrayList<Detail_Information> mGroupList = null;
+	private ArrayList<Detail_Information> list = new ArrayList<Detail_Information>();
+	private ArrayList<ArrayList<Detail_Information>> mChildList = null;
+	private ArrayList<Detail_Information> mChildListContent1 = null;
 	private BaseExpandableAdapter adapter;
 	private BluetoothService btService = null;
 	private final Handler mHandler = new Handler() {
@@ -68,13 +68,14 @@ public class MenuActivity extends Activity {
 		setLayout();
 		// NfcRead.NFCRead_activity.finish();
 
-		mGroupList = new ArrayList<String>();
-		mChildList = new ArrayList<ArrayList<String>>();
-		mChildListContent1 = new ArrayList<String>();
+		mGroupList = new ArrayList<Detail_Information>();
+		mChildList = new ArrayList<ArrayList<Detail_Information>>();
+		mChildListContent1 = new ArrayList<Detail_Information>();
+		
+		Detail_Information example = new Detail_Information();
+		example.menu_name = "Midori Sour";
 
-		mChildListContent1.add("Midori Sour");
-		mChildListContent1.add("Sex on the beach");
-		mChildListContent1.add("Gin Tonic");
+		mChildListContent1.add(example);
 
 		mChildList.add(mChildListContent1);
 		mChildList.add(mChildListContent1);
@@ -237,12 +238,12 @@ public class MenuActivity extends Activity {
 	}
 
 	public class Menu_receive extends
-			AsyncTask<String, Void, ArrayList<String>> {
+			AsyncTask<String, Void, ArrayList<Detail_Information>> {
 		private final ProgressDialog dialog = new ProgressDialog(
 				MenuActivity.this);
 
 		@Override
-		protected void onPostExecute(ArrayList<String> result) {
+		protected void onPostExecute(ArrayList<Detail_Information> result) {
 			super.onPostExecute(result);
 			adapter.setGroup(result);
 
@@ -259,17 +260,17 @@ public class MenuActivity extends Activity {
 		}
 
 		@Override
-		protected ArrayList<String> doInBackground(String... params) {
-			ArrayList<String> result = new ArrayList<String>();
-			ArrayList<ArrayList<String>> detail_menu = new ArrayList<ArrayList<String>>();
-			HashMap<Integer, ArrayList<String>> menu_storage = new HashMap<Integer, ArrayList<String>>();
+		protected ArrayList<Detail_Information> doInBackground(String... params) {
+			ArrayList<Detail_Information> result = new ArrayList<Detail_Information>();
+			ArrayList<ArrayList<Detail_Information>> detail_menu = new ArrayList<ArrayList<Detail_Information>>();
+			HashMap<Integer, ArrayList<Detail_Information>> menu_storage = new HashMap<Integer, ArrayList<Detail_Information>>();
 			ArrayList<String> menu1 = new ArrayList<String>();
 			ArrayList<String> menu2 = new ArrayList<String>();
 
 			try {
 				// (1)
 				HttpGet method = new HttpGet(
-						"http://cs408.kaist.ac.kr:4418/menu_receive");
+						"http://cs408.kaist.ac.kr:4418/api/menu_receive");
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
 				// 헤더를 설정
@@ -305,16 +306,16 @@ public class MenuActivity extends Activity {
 					di.price=price;
 					di.pic_link = pic_link;
 					if (!menu_storage.containsKey(menu_id))
-						menu_storage.put(menu_id, new ArrayList<String>());
-					menu_storage.get(menu_id).add(menu_name);
+						menu_storage.put(menu_id, new ArrayList<Detail_Information>());
+					menu_storage.get(menu_id).add(di);
 				}
 
-				Set<Entry<Integer, ArrayList<String>>> set = menu_storage
+				Set<Entry<Integer, ArrayList<Detail_Information>>> set = menu_storage
 						.entrySet();
-				Iterator<Entry<Integer, ArrayList<String>>> it = set.iterator();
+				Iterator<Entry<Integer, ArrayList<Detail_Information>>> it = set.iterator();
 
 				while (it.hasNext()) {
-					Map.Entry<Integer, ArrayList<String>> e = (Map.Entry<Integer, ArrayList<String>>) it
+					Map.Entry<Integer, ArrayList<Detail_Information>> e = (Map.Entry<Integer, ArrayList<Detail_Information>>) it
 							.next();
 					detail_menu.add(e.getValue());
 
@@ -322,7 +323,9 @@ public class MenuActivity extends Activity {
 				adapter.setChild(detail_menu);
 
 				for (int i = 0; i < category.length(); i++) {
-					result.add(category.getJSONObject(i).getString("name"));
+					Detail_Information temp = new Detail_Information();
+					temp.menu_name = category.getJSONObject(i).getString("name");
+					result.add(temp);
 				}
 
 			} catch (Exception e) {
