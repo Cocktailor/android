@@ -41,8 +41,11 @@ public class DetailViewActivity extends Activity {
 		TextView item_name = (TextView) findViewById(R.id.detail_view_name);
 		item_name.setText(item);
 		
+		TextView des_view_title = (TextView)findViewById(R.id.description_title);
+		des_view_title.setBackgroundResource(R.layout.linesample);
 		TextView des_view  = (TextView) findViewById(R.id.description);
 		des_view.setText(description);
+		
 		
 		ImageButton close_button = (ImageButton)findViewById(R.id.detail_view_close);
 		close_button.setOnClickListener(new OnClickListener(){

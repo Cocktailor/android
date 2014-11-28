@@ -1,10 +1,15 @@
 package com.cs408.cocktailor_Activity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.cs408.R;
+import com.cs408.cocktailor_Service.ImageLoader;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,7 +17,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +40,16 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
 	private SharedPreferences prefs;
+	private ImageView thumbnail;
+	private Context mContext;
+	Bitmap bmimg;
 
 	public BaseExpandableAdapter(Context c, ArrayList<Detail_Information> groupList,
 			ArrayList<ArrayList<Detail_Information>> childList) {
 		super();
 		this.inflater = LayoutInflater.from(c);
+		
+		this.mContext = c;
 
 		this.prefs = c.getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
 		this.groupList = groupList;
@@ -124,6 +137,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating = (RatingBar) v.findViewById(R.id.ratingBar1);
 			viewHolder.menu_plus_button = (ImageButton) v
 					.findViewById(R.id.menu_add_button1);
+			viewHolder.menu_minus_button = (ImageButton) v
+					.findViewById(R.id.menu_minus_button1);
+			viewHolder.thumbnail = (ImageView) v.findViewById(R.id.child_thumbnail);
+			viewHolder.count = (TextView)v.findViewById(R.id.counting);
+			
+			
 			//viewHolder.np = (NumberPicker)v.findViewById(R.id.number_picker1);
 			//viewHolder.np.setMaxValue(10);
 	        //viewHolder.np.setMinValue(0);
@@ -134,12 +153,19 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder.rating.setRating((float) 4.5); // 처음보여줄때(색깔이 한개도없음)
 														// default 값이 0 이다
 			viewHolder.rating.setIsIndicator(true);
+			
 
 			v.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) v.getTag();
 		}
 
+		thumbnail = viewHolder.thumbnail;
+
+		ImageLoader imageloader = new ImageLoader(this.mContext);
+		
+		imageloader.DisplayImage("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link, thumbnail);
+		//(new image_receive()).execute("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link);
 		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition).menu_name);
 		viewHolder.tv_childName.setOnClickListener(new View.OnClickListener() {
 			
@@ -199,12 +225,40 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 	}
 
 	class ViewHolder {
-		public ImageView iv_image;
+		public ImageView iv_image, thumbnail;
 		public TextView tv_groupName;
-		public TextView tv_childName;
+		public TextView tv_childName,count;
 		public NumberPicker np;
 		public RatingBar rating;
-		public ImageButton menu_plus_button;
+		public ImageButton menu_plus_button,menu_minus_button;
+	}
+	
+	private class image_receive extends AsyncTask<String, Integer, Bitmap> {
+
+		@Override
+		protected Bitmap doInBackground(String... urls) {
+			// TODO Auto-generated method stub
+			try {
+				URL myFileUrl = new URL(urls[0]);
+				HttpURLConnection conn = (HttpURLConnection) myFileUrl
+						.openConnection();
+				conn.setDoInput(true);
+				conn.connect();
+
+				InputStream is = conn.getInputStream();
+
+				bmimg = BitmapFactory.decodeStream(is);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return bmimg;
+		}
+
+		protected void onPostExecute(Bitmap img) {
+			thumbnail.setImageBitmap(img);
+		}
+
 	}
 
 }

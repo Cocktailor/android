@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:background="#00000000"
+            android:background="@android:color/transparent"
             android:src="@drawable/cocktailor_x1" />
     </LinearLayout>
 
@@ -55,9 +55,10 @@
 
         <ImageView
             android:id="@+id/menu_thumbnail"
-            android:layout_width="wrap_content"
+            android:layout_width="200sp"
             android:layout_gravity="center"
-            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:layout_height="200sp"
             android:src = "@drawable/cocktailor_plus" />
     </LinearLayout>
     <LinearLayout
@@ -80,6 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="17sp"
+            android:paddingTop="10dp"
+            android:textColor="#FF888888"
             android:text="@string/description"
             android:background="#00000000" />
         
