@@ -72,6 +72,10 @@
             android:name="com.cs408.cocktailor_Activity.CartConfirmActivity"
             android:theme="@android:style/Theme.Dialog" />
 
+		<activity
+            android:name="com.cs408.cocktailor_Activity.NFCWaiterPopupActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        
         <service android:name="com.cs408.cocktailor_Service.WaiterCallService" />
 
         <activity

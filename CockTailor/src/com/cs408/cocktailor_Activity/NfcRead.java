@@ -192,8 +192,7 @@ public class NfcRead extends Activity {
 				finish();
 			} else if (result.equals("waiter")) {
 				Log.e("my", "waiter mode");
-				Intent service = new Intent(getApplicationContext(),
-						WaiterCallService.class);
+				Intent service = new Intent(getApplicationContext(), WaiterCallService.class);
 				startService(service);
 				edit.putBoolean("NFC", true);
 				edit.putString("who", "waiter");
