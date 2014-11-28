@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,7 +51,7 @@ public class MenuActivity extends Activity {
 	private ArrayList<Detail_Information> list = new ArrayList<Detail_Information>();
 	private ArrayList<ArrayList<Detail_Information>> mChildList = null;
 	private ArrayList<Detail_Information> mChildListContent1 = null;
-	private BaseExpandableAdapter adapter;
+	public BaseExpandableAdapter adapter;
 	private BluetoothService btService = null;
 	private final Handler mHandler = new Handler() {
 
@@ -173,6 +175,32 @@ public class MenuActivity extends Activity {
 			}
 		});
 	}
+	@Override
+	protected void onStart() {
+		super.onStart();
+		SharedPreferences prefs = getSharedPreferences("cart", Activity.MODE_PRIVATE);
+		int cnt = prefs.getInt("count", 0);
+		if(cnt==0){
+			adapter.clear_count_of_menu();
+			Editor edit=prefs.edit();
+			edit.putInt("price", 0);
+			edit.commit();
+		}
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedPreferences prefs = getSharedPreferences("cart", Activity.MODE_PRIVATE);
+		int cnt = prefs.getInt("count", 0);
+		if(cnt==0){
+			adapter.clear_count_of_menu();
+			Editor edit=prefs.edit();
+			edit.putInt("price", 0);
+			edit.commit();
+		}
+		
+	}
+
 
 	/*
 	 * Layout

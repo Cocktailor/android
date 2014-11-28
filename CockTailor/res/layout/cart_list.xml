@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/cart_list_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:maxWidth="170dp"
-        android:minWidth="170dp"
-        android:text="Menu" />
+        
+        android:layout_gravity="left"
+        android:maxWidth="200dp"
+        android:minWidth="200dp"
+        android:text="Menu"
+        android:textSize="30sp" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/cart_list_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="am"
+        android:layout_gravity="right"
         android:maxWidth="30dp"
         android:minWidth="30dp"
-        android:textSize="15sp" />
-
-    <ImageButton
-        android:id="@+id/cart_plus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#00000000"
-        android:src="@drawable/temp_arrow3" />
-
-    <ImageButton
-        android:id="@+id/cart_minus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#00000000"
-        android:src="@drawable/temp_arrow4" />
+        android:text="am"
+        android:textSize="30sp" />
 
 </LinearLayout>

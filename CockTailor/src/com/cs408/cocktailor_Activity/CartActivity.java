@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import com.cs408.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
@@ -73,6 +74,10 @@ public class CartActivity extends Activity {
 				// TODO Auto-generated method stub
 
 				(new send_order()).execute("");
+				Intent intent = new Intent();
+				intent.setClass(getApplicationContext(), CartConfirmActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 				finish();
 			}
 

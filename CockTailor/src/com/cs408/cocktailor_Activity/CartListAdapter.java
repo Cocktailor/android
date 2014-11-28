@@ -50,7 +50,7 @@ public class CartListAdapter extends ArrayAdapter<Added_Menu>{
 		final int mAmount = ob.amount;
 		TextView menu_name = (TextView)view.findViewById(R.id.cart_list_menu);
 		TextView menu_amount = (TextView)view.findViewById(R.id.cart_list_amount);
-		ImageButton plus = (ImageButton)view.findViewById(R.id.cart_plus_button);
+		/*ImageButton plus = (ImageButton)view.findViewById(R.id.cart_plus_button);
 		ImageButton minus = (ImageButton)view.findViewById(R.id.cart_minus_button);
 		
 		plus.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class CartListAdapter extends ArrayAdapter<Added_Menu>{
 				edit.commit();
 				adapter.notifyDataSetChanged();
 			}
-		});
+		});*/
 		
 		
 		menu_name.setText(ob.menu);

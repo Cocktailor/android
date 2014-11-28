@@ -178,6 +178,10 @@ public class NfcRead extends Activity {
 				edit.putBoolean("NFC", true);
 				edit.putString("who", "customer");
 				edit.commit();
+				prefs = getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
+				edit = prefs.edit();
+				edit.clear();
+				edit.commit();
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				Log.e("my", result);

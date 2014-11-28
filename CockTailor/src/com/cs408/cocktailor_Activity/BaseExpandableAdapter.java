@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.cs408.R;
@@ -36,12 +37,13 @@ import android.widget.Toast;
 public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
 	private ArrayList<Detail_Information> groupList = null;
-	private ArrayList<ArrayList<Detail_Information>> childList = null;
+	public ArrayList<ArrayList<Detail_Information>> childList = null;
 	private LayoutInflater inflater = null;
 	private ViewHolder viewHolder = null;
 	private SharedPreferences prefs;
 	private ImageView thumbnail;
 	private Context mContext;
+	public BaseExpandableAdapter adapter = this;
 	Bitmap bmimg;
 
 	public BaseExpandableAdapter(Context c, ArrayList<Detail_Information> groupList,
@@ -64,6 +66,17 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		this.childList = childList;
 	}
 
+	public void clear_count_of_menu(){
+		Iterator<ArrayList<Detail_Information>> iter = this.childList.iterator();
+		while(iter.hasNext()){
+			Iterator<Detail_Information> iter2 = iter.next().iterator();
+			while(iter2.hasNext()){
+				Detail_Information temp = iter2.next();
+				temp.count=0;
+			}
+		}
+		this.notifyDataSetChanged();
+	}
 	@Override
 	public Detail_Information getGroup(int groupPosition) {
 		return groupList.get(groupPosition);
@@ -134,7 +147,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder = new ViewHolder();
 			v = inflater.inflate(R.layout.cocktail_list_row, null);
 			viewHolder.tv_childName = (TextView) v.findViewById(R.id.tv_child);
-			viewHolder.rating = (RatingBar) v.findViewById(R.id.ratingBar1);
+			viewHolder.price = (TextView)v.findViewById(R.id.price);
 			viewHolder.menu_plus_button = (ImageButton) v
 					.findViewById(R.id.menu_add_button1);
 			viewHolder.menu_minus_button = (ImageButton) v
@@ -147,12 +160,6 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			//viewHolder.np.setMaxValue(10);
 	        //viewHolder.np.setMinValue(0);
 	        //viewHolder.np.setWrapSelectorWheel(false);
-
-			viewHolder.rating.setStepSize((float) 0.5); // 별 색깔이 1칸씩줄어들고 늘어남
-														// 0.5로하면 반칸씩 들어감
-			viewHolder.rating.setRating((float) 4.5); // 처음보여줄때(색깔이 한개도없음)
-														// default 값이 0 이다
-			viewHolder.rating.setIsIndicator(true);
 			
 
 			v.setTag(viewHolder);
@@ -167,6 +174,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		imageloader.DisplayImage("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link, thumbnail);
 		//(new image_receive()).execute("http://cs408.kaist.ac.kr:4418/api/picture/"+getChild(groupPosition, childPosition).pic_link);
 		viewHolder.tv_childName.setText(getChild(groupPosition, childPosition).menu_name);
+		viewHolder.count.setText(Integer.toString(getChild(groupPosition, childPosition).count));
+		viewHolder.price.setText(Integer.toString(getChild(groupPosition, childPosition).price));
 		viewHolder.tv_childName.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -184,6 +193,39 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				
 			}
 		});
+		viewHolder.menu_minus_button
+		.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Editor edit = prefs.edit();
+				int ex_cart = prefs.getInt(getChild(groupP, childP).menu_name, 0);//카트에 추가돼있는 메뉴들
+				Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
+				int cnt = prefs.getInt("count", 0);
+				int total_price = prefs.getInt("price", 0);
+				if(ex_cart==1){
+					edit.putInt(getChild(groupP, childP).menu_name, 0);
+					added_menu.remove(getChild(groupP, childP).menu_name);
+					getChild(groupP, childP).count-=1;
+					total_price-=getChild(groupP, childP).price;
+					cnt-=1;
+				}
+				else if (ex_cart>1){
+					edit.putInt(getChild(groupP, childP).menu_name, ex_cart-1);
+					getChild(groupP, childP).count-=1;
+					total_price-=getChild(groupP, childP).price;
+				}
+				else{
+					
+				}
+				
+				
+				edit.putInt("count", cnt);
+				edit.putInt("price", total_price);
+				edit.putStringSet("added_menu", added_menu);
+				edit.commit();
+				adapter.notifyDataSetChanged();
+			}
+		});
 		viewHolder.menu_plus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -192,22 +234,30 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				int ex_cart = prefs.getInt(getChild(groupP, childP).menu_name, 0);//카트에 추가돼있는 메뉴들
 				Set<String> added_menu = prefs.getStringSet("added_menu", new HashSet<String>());
 				int cnt = prefs.getInt("count", 0);
+				int total_price = prefs.getInt("price", 0);
 				if(ex_cart==0){
 					edit.putInt(getChild(groupP, childP).menu_name, 1);
 					added_menu.add(getChild(groupP, childP).menu_name);
+					total_price+=getChild(groupP, childP).price;
 					cnt+=1;
 				}
 				else{
 					edit.putInt(getChild(groupP, childP).menu_name, ex_cart+1);
+					total_price+=getChild(groupP, childP).price;
 				}
+				
+				getChild(groupP, childP).count+=1;
 				edit.putInt("count", cnt);
+				edit.putInt("price", total_price);
 				edit.putStringSet("added_menu", added_menu);
 				edit.commit();
 				Toast.makeText(
 						v.getContext(),
-						getChild(groupP, childP)
-								+ "is added in cart\n" + "cnt = " + Integer.toString(cnt),
+						getChild(groupP, childP).menu_name
+								+ "is added in cart\n" +
+								"Total Price = " + Integer.toString(total_price),
 						Toast.LENGTH_SHORT).show();
+				adapter.notifyDataSetChanged();
 			}
 		});
 
@@ -226,10 +276,9 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
 	class ViewHolder {
 		public ImageView iv_image, thumbnail;
-		public TextView tv_groupName;
+		public TextView tv_groupName,price;
 		public TextView tv_childName,count;
 		public NumberPicker np;
-		public RatingBar rating;
 		public ImageButton menu_plus_button,menu_minus_button;
 	}
 	

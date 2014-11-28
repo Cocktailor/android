@@ -37,12 +37,13 @@
         android:text="0"
         android:textSize="15sp" />
 
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        style="?android:attr/ratingBarStyleSmall"
+    <TextView
+        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/menu_minus_button1" />
+        android:layout_toLeftOf="@+id/menu_minus_button1"
+        android:textSize="18sp"
+        android:text="\2000" />
 
     <TextView
         android:id="@+id/tv_child"

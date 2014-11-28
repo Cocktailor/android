@@ -14,11 +14,13 @@
 
         <ImageButton
             android:id="@+id/cart_back_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/cocktailor_back1" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="50dp" />
 
     </LinearLayout>
 

@@ -5,4 +5,5 @@ public class Detail_Information {
 	int price;
 	String pic_link;
 	String description;
+	int count=0;
 }
