@@ -298,7 +298,7 @@ public class MenuActivity extends Activity {
 			try {
 				// (1)
 				HttpGet method = new HttpGet(
-						"http://cs408.kaist.ac.kr:4418/api/menu_receive");
+						"http://cs408.kaist.ac.kr:4418/api/menu_receive/1");
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
 				// 헤더를 설정

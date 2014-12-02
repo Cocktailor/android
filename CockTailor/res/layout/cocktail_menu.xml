@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical"
-    android:background="@drawable/cocktailor_background" >
+    android:background="@drawable/waigent_background" >
      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/cocktailor_theme"
+        android:background="@drawable/waigent_theme"
         android:orientation="horizontal" >
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_gravity="left"
             android:background="#00000000"
             android:layout_weight="0.5"
-            android:src="@drawable/cocktailor_call_button1"
+            android:src="@drawable/waigent_call_button1"
             />
         <View
             android:layout_width="0dp"
@@ -64,7 +64,7 @@
             android:layout_gravity="right"
             android:background="#00000000"
             android:layout_weight="0.5"
-            android:src="@drawable/cocktailor_cart_button1" />
+            android:src="@drawable/waigent_cart_button1" />
     </LinearLayout>
 
 </LinearLayout>

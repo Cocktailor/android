@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
-    android:background="@drawable/cocktailor_category">
+    android:background="@drawable/waigent_category_background">
 
     <ImageView 
         android:id="@+id/iv_image"

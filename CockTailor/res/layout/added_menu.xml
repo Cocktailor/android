@@ -4,19 +4,19 @@
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical" 
-    android:background="@drawable/cocktailor_background" >
+    android:background="@drawable/waigent_background" >
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/cocktailor_theme"
+        android:background="@drawable/waigent_theme"
         android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/cart_back_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/cocktailor_back1" />
+            android:src="@drawable/waigent_back1" />
 
         <Space
             android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             android:background="#00000000"
-            android:src="@drawable/cocktailor_order_button1" />
+            android:src="@drawable/waigent_order_button1" />
 
     </LinearLayout>
  
