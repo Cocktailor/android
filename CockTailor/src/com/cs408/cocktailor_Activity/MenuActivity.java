@@ -3,6 +3,7 @@ package com.cs408.cocktailor_Activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -45,12 +46,15 @@ import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import android.app.AlertDialog;
+
 public class MenuActivity extends Activity {
 
 	private ArrayList<Detail_Information> mGroupList = null;
 	private ArrayList<Detail_Information> list = new ArrayList<Detail_Information>();
 	private ArrayList<ArrayList<Detail_Information>> mChildList = null;
 	private ArrayList<Detail_Information> mChildListContent1 = null;
+	public ArrayList<Functional_Call_Information> fclist = null;
 	public BaseExpandableAdapter adapter;
 	private BluetoothService btService = null;
 	private final Handler mHandler = new Handler() {
@@ -61,6 +65,7 @@ public class MenuActivity extends Activity {
 		}
 
 	};
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +95,7 @@ public class MenuActivity extends Activity {
 			btService = new BluetoothService(this, mHandler);
 		}
 
-		// ±×·ì Å¬¸¯ ÇßÀ» °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
@@ -99,7 +104,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// Â÷ÀÏµå Å¬¸¯ ÇßÀ» °æ¿ì ÀÌº¥Æ®
+		// ï¿½ï¿½ï¿½Ïµï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -113,7 +118,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// ±×·ìÀÌ ´ÝÈú °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			@Override
 			public void onGroupCollapse(int groupPosition) {
@@ -124,7 +129,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// ±×·ìÀÌ ¿­¸± °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			@Override
 			public void onGroupExpand(int groupPosition) {
@@ -146,32 +151,56 @@ public class MenuActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-
+		
 		call_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(v.getContext(), "call waiter",
-						Toast.LENGTH_SHORT).show();
-				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-				adapter.enable();
+//				Toast.makeText(v.getContext(), "call waiter",
+//						Toast.LENGTH_SHORT).show();
+				
+				String nameArray[] = new String[fclist.size()];  
+				
+				
+				for(int i=0; i<fclist.size(); i++) {
+					Functional_Call_Information fc = fclist.get(i);
+					nameArray[i] = fc.name;
+				}
+				
+			    AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
+			    builder.setTitle("Call")
+			           .setItems(nameArray, new DialogInterface.OnClickListener() {
+			               public void onClick(DialogInterface dialog, int which) {
+			            	   Functional_Call_Information fc = fclist.get(which);
+			            	   Log.d("yo", fc.toString());
+			            	   
+								BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+								adapter.enable();
+	
+								Intent discoverableIntent = new Intent(
+										BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+								discoverableIntent.putExtra(
+										BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+								startActivity(discoverableIntent);
+								(new Call_waiter()).execute("");
 
-				Intent discoverableIntent = new Intent(
-						BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-				discoverableIntent.putExtra(
-						BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
-				startActivity(discoverableIntent);
-				(new Call_waiter()).execute("");
-
+			              }
+			    });
+			    
+				AlertDialog dialog = builder.create();
+			    dialog.show();
+			    
 			}
 		});
+		SharedPreferences prefs =  getSharedPreferences("from", Activity.MODE_PRIVATE);
+		final int rest_id = prefs.getInt("restaurant", 1);
 
 		(new Menu_receive())
-				.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
+				.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/" + Integer.toString(rest_id));
 		refresh_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				(new Menu_receive())
-						.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
+						.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/"+ Integer.toString(rest_id));
 			}
 		});
 	}
@@ -265,10 +294,9 @@ public class MenuActivity extends Activity {
 		}
 	}
 
-	public class Menu_receive extends
-			AsyncTask<String, Void, ArrayList<Detail_Information>> {
-		private final ProgressDialog dialog = new ProgressDialog(
-				MenuActivity.this);
+	public class Menu_receive extends AsyncTask<String, Void, ArrayList<Detail_Information>> {
+
+		private final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
 
 		@Override
 		protected void onPostExecute(ArrayList<Detail_Information> result) {
@@ -294,31 +322,34 @@ public class MenuActivity extends Activity {
 			HashMap<Integer, ArrayList<Detail_Information>> menu_storage = new HashMap<Integer, ArrayList<Detail_Information>>();
 			ArrayList<String> menu1 = new ArrayList<String>();
 			ArrayList<String> menu2 = new ArrayList<String>();
-
+			
+			fclist = new ArrayList<Functional_Call_Information>();
+			
 			try {
 				// (1)
 				HttpGet method = new HttpGet(
-						"http://cs408.kaist.ac.kr:4418/api/menu_receive/1");
+						params[0]);
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
-				// Çì´õ¸¦ ¼³Á¤
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				// method.setHeader("Connection", "Keep-Alive");
 				// (3)
 				Log.d("asdf", "JSON Receive");
 				HttpResponse response = client.execute(method);
-				// (4) response status °¡ 400 ÀÌ ¾Æ´Ï¶ó¸é ( ¿À·ù³ª¸é )
+				// (4) response status ï¿½ï¿½ 400 ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½ ( ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ )
 				int status = response.getStatusLine().getStatusCode();
 				if (status != HttpStatus.SC_OK) {
 					Log.e("asdf", "Connection is failed");
-					throw new Exception(""); // ½ÇÆÐ
+					throw new Exception(""); // ï¿½ï¿½ï¿½ï¿½
 
 				}
-				// (5) response ¹Þ±â JSONArray ·Î ÆÄ½Ì
+				// (5) response ï¿½Þ±ï¿½ JSONArray ï¿½ï¿½ ï¿½Ä½ï¿½
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
 				JSONObject jsonObject = new JSONObject(str);
 				JSONArray category = jsonObject.getJSONArray("category");
 				JSONArray cocktail_menu = jsonObject.getJSONArray("menu");
+				JSONArray functional_call_names = jsonObject.getJSONArray("functional_call_name");
 				JSONObject temporary;
 
 				for (int i = 0; i < cocktail_menu.length(); i++) {
@@ -338,8 +369,7 @@ public class MenuActivity extends Activity {
 					menu_storage.get(menu_id).add(di);
 				}
 
-				Set<Entry<Integer, ArrayList<Detail_Information>>> set = menu_storage
-						.entrySet();
+				Set<Entry<Integer, ArrayList<Detail_Information>>> set = menu_storage.entrySet();
 				Iterator<Entry<Integer, ArrayList<Detail_Information>>> it = set.iterator();
 
 				while (it.hasNext()) {
@@ -354,6 +384,21 @@ public class MenuActivity extends Activity {
 					Detail_Information temp = new Detail_Information();
 					temp.menu_name = category.getJSONObject(i).getString("name");
 					result.add(temp);
+				}
+
+
+				for (int i = 0; i < functional_call_names.length(); i++) {
+					temporary = functional_call_names.getJSONObject(i);
+					int restaurant_id = temporary.getInt("restaurant_id");
+					String name = temporary.getString("name");
+					String pic_link = temporary.getString("picture");
+					
+					Functional_Call_Information fc = new Functional_Call_Information();
+					fc.restaurant_id = restaurant_id;
+					fc.name = name;
+					fc.pic_link = pic_link;
+					
+					fclist.add(fc);
 				}
 
 			} catch (Exception e) {
