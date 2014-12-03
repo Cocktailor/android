@@ -15,7 +15,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	private static void generateNotification(Context context, String message) {
 
-		int icon = R.drawable.cocktailor_icon;
+		int icon = R.drawable.waigent_icon;
 		long when = System.currentTimeMillis();
 
 		NotificationManager notificationManager = (NotificationManager) context

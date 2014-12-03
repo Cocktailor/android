@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
-    android:background="@drawable/waigent_category_background">
+    android:background="@drawable/waigent_category">
 
     <ImageView 
         android:id="@+id/iv_image"
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:textColor="#000000"
+        android:textColor="#C2C2B6"
         android:text="Group" 
         />
 
