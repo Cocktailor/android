@@ -95,7 +95,7 @@ public class MenuActivity extends Activity {
 			btService = new BluetoothService(this, mHandler);
 		}
 
-		// �׷� Ŭ�� ���� ��� �̺�Ʈ
+		// 占쌓뤄옙 클占쏙옙 占쏙옙占쏙옙 占쏙옙占� 占싱븝옙트
 		mListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
@@ -104,7 +104,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// ���ϵ� Ŭ�� ���� ��� �̺�Ʈ
+		// 占쏙옙占싹듸옙 클占쏙옙 占쏙옙占쏙옙 占쏙옙占� 占싱븝옙트
 		mListView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -118,7 +118,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// �׷��� ���� ��� �̺�Ʈ
+		// 占쌓뤄옙占쏙옙 占쏙옙占쏙옙 占쏙옙占� 占싱븝옙트
 		mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			@Override
 			public void onGroupCollapse(int groupPosition) {
@@ -129,7 +129,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// �׷��� ���� ��� �̺�Ʈ
+		// 占쌓뤄옙占쏙옙 占쏙옙占쏙옙 占쏙옙占� 占싱븝옙트
 		mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			@Override
 			public void onGroupExpand(int groupPosition) {
@@ -173,15 +173,18 @@ public class MenuActivity extends Activity {
 			            	   Functional_Call_Information fc = fclist.get(which);
 			            	   Log.d("yo", fc.toString());
 			            	   
-								BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-								adapter.enable();
+			            	   BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+			            	   adapter.enable();
 	
-								Intent discoverableIntent = new Intent(
-										BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-								discoverableIntent.putExtra(
-										BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
-								startActivity(discoverableIntent);
-								(new Call_waiter()).execute("");
+			            	   Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+			            	   discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
+			            	   startActivity(discoverableIntent);
+			            	   
+			            	   Call_waiter c = new Call_waiter();
+			            	   c.table = "3";
+			            	   c.functional_call_name = fc.name;
+			            	   c.restaurant_id = "1";
+			            	   c.execute("");
 
 			              }
 			    });
@@ -245,8 +248,10 @@ public class MenuActivity extends Activity {
 	}
 
 	public class Call_waiter extends AsyncTask<String, Void, ArrayList<String>> {
-		private final ProgressDialog dialog = new ProgressDialog(
-				MenuActivity.this);
+		private final ProgressDialog dialog = new ProgressDialog(MenuActivity.this);
+		public String table;
+		public String functional_call_name;
+		public String restaurant_id;
 
 		@Override
 		protected void onPreExecute() {
@@ -274,9 +279,10 @@ public class MenuActivity extends Activity {
 				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-				parameters.add(new BasicNameValuePair("ble_id", adapter
-						.getAddress()));
-				parameters.add(new BasicNameValuePair("table", "3"));
+				parameters.add(new BasicNameValuePair("ble_id", adapter.getAddress()));
+				parameters.add(new BasicNameValuePair("table", table));
+				parameters.add(new BasicNameValuePair("functional_call_name", functional_call_name));
+				parameters.add(new BasicNameValuePair("restaurant_id", restaurant_id));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);
@@ -331,19 +337,19 @@ public class MenuActivity extends Activity {
 						params[0]);
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
-				// ����� ����
+				// 占쏙옙占쏙옙占� 占쏙옙占쏙옙
 				// method.setHeader("Connection", "Keep-Alive");
 				// (3)
 				Log.d("asdf", "JSON Receive");
 				HttpResponse response = client.execute(method);
-				// (4) response status �� 400 �� �ƴ϶�� ( �������� )
+				// (4) response status 占쏙옙 400 占쏙옙 占싣니띰옙占� ( 占쏙옙占쏙옙占쏙옙占쏙옙 )
 				int status = response.getStatusLine().getStatusCode();
 				if (status != HttpStatus.SC_OK) {
 					Log.e("asdf", "Connection is failed");
-					throw new Exception(""); // ����
+					throw new Exception(""); // 占쏙옙占쏙옙
 
 				}
-				// (5) response �ޱ� JSONArray �� �Ľ�
+				// (5) response 占쌨깍옙 JSONArray 占쏙옙 占식쏙옙
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
 				JSONObject jsonObject = new JSONObject(str);

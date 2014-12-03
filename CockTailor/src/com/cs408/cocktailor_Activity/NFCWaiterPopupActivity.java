@@ -59,6 +59,7 @@ private SharedPreferences prefs;
 				prefs = getSharedPreferences("waiter", Activity.MODE_PRIVATE);
 				Editor edit = prefs.edit();
 				edit.putString("waiter_name", waiter_name);
+				edit.putString("restaurant_id", "1");
 				edit.commit();
 
 				registerGcm();

@@ -129,7 +129,9 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 				prefs = Gcontext.getSharedPreferences("waiter", Activity.MODE_PRIVATE);
 				String waiter_name = prefs.getString("waiter_name", "default");
 				parameters.add(new BasicNameValuePair("waiter_name", waiter_name));
-				Log.e("my", waiter_name);
+
+				String restaurant_id = prefs.getString("restaurant_id", "error");
+				parameters.add(new BasicNameValuePair("restaurant_id", restaurant_id));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
 						HTTP.UTF_8);
