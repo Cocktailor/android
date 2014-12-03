@@ -90,7 +90,7 @@ public class MenuActivity extends Activity {
 			btService = new BluetoothService(this, mHandler);
 		}
 
-		// ±×·ì Å¬¸¯ ÇßÀ» °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v,
@@ -99,7 +99,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// Â÷ÀÏµå Å¬¸¯ ÇßÀ» °æ¿ì ÀÌº¥Æ®
+		// ï¿½ï¿½ï¿½Ïµï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
@@ -113,7 +113,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// ±×·ìÀÌ ´ÝÈú °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
 			@Override
 			public void onGroupCollapse(int groupPosition) {
@@ -124,7 +124,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		// ±×·ìÀÌ ¿­¸± °æ¿ì ÀÌº¥Æ®
+		// ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 		mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 			@Override
 			public void onGroupExpand(int groupPosition) {
@@ -164,14 +164,16 @@ public class MenuActivity extends Activity {
 
 			}
 		});
+		SharedPreferences prefs =  getSharedPreferences("from", Activity.MODE_PRIVATE);
+		final int rest_id = prefs.getInt("restaurant", 1);
 
 		(new Menu_receive())
-				.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
+				.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/" + Integer.toString(rest_id));
 		refresh_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				(new Menu_receive())
-						.execute("http://cs408.kaist.ac.kr:4418/menu_receive");
+						.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/"+ Integer.toString(rest_id));
 			}
 		});
 	}
@@ -298,22 +300,22 @@ public class MenuActivity extends Activity {
 			try {
 				// (1)
 				HttpGet method = new HttpGet(
-						"http://cs408.kaist.ac.kr:4418/api/menu_receive/1");
+						params[0]);
 				// (2)
 				DefaultHttpClient client = new DefaultHttpClient();
-				// Çì´õ¸¦ ¼³Á¤
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				// method.setHeader("Connection", "Keep-Alive");
 				// (3)
 				Log.d("asdf", "JSON Receive");
 				HttpResponse response = client.execute(method);
-				// (4) response status °¡ 400 ÀÌ ¾Æ´Ï¶ó¸é ( ¿À·ù³ª¸é )
+				// (4) response status ï¿½ï¿½ 400 ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½ ( ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ )
 				int status = response.getStatusLine().getStatusCode();
 				if (status != HttpStatus.SC_OK) {
 					Log.e("asdf", "Connection is failed");
-					throw new Exception(""); // ½ÇÆÐ
+					throw new Exception(""); // ï¿½ï¿½ï¿½ï¿½
 
 				}
-				// (5) response ¹Þ±â JSONArray ·Î ÆÄ½Ì
+				// (5) response ï¿½Þ±ï¿½ JSONArray ï¿½ï¿½ ï¿½Ä½ï¿½
 				String str = EntityUtils
 						.toString(response.getEntity(), "UTF-8");
 				JSONObject jsonObject = new JSONObject(str);
