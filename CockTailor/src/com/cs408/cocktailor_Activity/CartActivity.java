@@ -75,6 +75,7 @@ public class CartActivity extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 
+				(new send_order()).execute("");
 				new AlertDialog.Builder(CartActivity.this)
 				.setTitle("Order Complete!")
 				.setItems(new String[]{"Ok"}, new DialogInterface.OnClickListener() {
@@ -155,7 +156,7 @@ public class CartActivity extends Activity {
 
 			try {
 				HttpClient client = new DefaultHttpClient();
-				String postURL = "http://cs408.kaist.ac.kr:4418/home/getorder";
+				String postURL = "http://cs408.kaist.ac.kr:4418/api/getorder";
 				HttpPost post = new HttpPost(postURL);
 
 				List<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -182,9 +183,13 @@ public class CartActivity extends Activity {
 				
 				Date d = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
-				
-				parameters.add(new BasicNameValuePair("table", "3"));
-				parameters.add(new BasicNameValuePair("price", "19000"));
+
+				SharedPreferences prefsa =  getSharedPreferences("from", Activity.MODE_PRIVATE);
+				String table_number = prefsa.getString("table_number", "0");
+				parameters.add(new BasicNameValuePair("table", table_number));
+				int rest_id = prefsa.getInt("restaurant", 1);
+				parameters.add(new BasicNameValuePair("restaurant_id", Integer.toString(rest_id)));
+				parameters.add(new BasicNameValuePair("price", "0"));
 				parameters.add(new BasicNameValuePair("time", sdf.format(d)));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,

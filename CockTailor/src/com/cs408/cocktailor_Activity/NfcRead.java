@@ -180,6 +180,7 @@ public class NfcRead extends Activity {
 
 				edit.putBoolean("NFC", true);
 				edit.putInt("restaurant", Integer.parseInt(result.split("customer")[1].substring(0, 1)));
+				Log.e("customer","restaurant_id = " + Integer.parseInt(result.split("customer")[1].substring(0, 1)));
 				edit.putString("table_number", result.split("customer")[1].substring(1, 2));
 				Log.e("customer","Table Number = " + result.split("customer")[1].substring(1, 2));
 				edit.putString("who", "customer");
