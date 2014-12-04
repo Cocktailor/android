@@ -70,8 +70,22 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 				Log.d("my", "gcm is arrived!!");
 				BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 				adapter.startDiscovery();
-
 			} else if (key.equals("table")) {
+				String table = value.toString();
+				String functional_call_name = "";
+				for (String key1 : bundle.keySet()) {
+					if(key1.equals("functional_call_name")) {
+						Object value1 = bundle.get(key1);
+						functional_call_name = value1.toString(); 
+					}
+				}
+				prefs = context.getSharedPreferences("call",
+						Activity.MODE_PRIVATE);
+				Editor edit = prefs.edit();
+				edit.putString("table", table);
+				edit.putString("functional_call_name", functional_call_name);
+				edit.commit();
+
 				Bundle bun = new Bundle();
 				bun.putString("notiMessage", "test");
 				 

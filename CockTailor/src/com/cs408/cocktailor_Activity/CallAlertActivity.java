@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -30,9 +31,14 @@ private SharedPreferences prefs;
 		long[] pattern = {100, 200};
 		final Vibrator m_vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		m_vibrator.vibrate(pattern, 1);
+		
+		SharedPreferences prefs = getSharedPreferences("call", Activity.MODE_PRIVATE);
+		String table = prefs.getString("table", "0");
+		String functional_call_name = prefs.getString("functional_call_name", "0");
+
 		new AlertDialog.Builder(CallAlertActivity.this)
 			.setTitle("Waigent - Customer Call")
-			.setMessage("\ntable : 3\n\ntonic water\n")
+			.setMessage("\ntable : " + table + "\n\n" + functional_call_name + "\n")
             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int id) {
                 	  finish();
