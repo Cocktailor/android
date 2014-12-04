@@ -74,7 +74,7 @@
 
 		<activity
             android:name="com.cs408.cocktailor_Activity.NFCWaiterPopupActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@android:style/Theme.Holo.Dialog" />
         
         <service android:name="com.cs408.cocktailor_Service.WaiterCallService" />
 

@@ -3,11 +3,13 @@ package com.cs408.cocktailor_Activity;
 import com.cs408.R;
 import com.cs408.cocktailor_Service.CustomerFindReceiver;
 import com.google.android.gcm.GCMRegistrar;
-
+import android.view.LayoutInflater;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -46,35 +48,45 @@ private SharedPreferences prefs;
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.e("my", "NFC Waiter Popup On Create");
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.nfcwaiter_popup);
-		Button cancel_button = (Button)findViewById(R.id.CancelButton);
-		Button okay_button = (Button)findViewById(R.id.OkayButton);
-		final EditText editt = (EditText)findViewById(R.id.NFCWaiterEditText);
 		
-		okay_button.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				String waiter_name = editt.getText().toString();
-				prefs = getSharedPreferences("waiter", Activity.MODE_PRIVATE);
-				Editor edit = prefs.edit();
-				edit.putString("waiter_name", waiter_name);
-				edit.putString("restaurant_id", "1");
-				edit.commit();
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(NFCWaiterPopupActivity.this);
+	    LayoutInflater inflater = NFCWaiterPopupActivity.this.getLayoutInflater();
+	    final View view = inflater.inflate(R.layout.nfcwaiter_popup, null);
+	    builder.setView(view)
+	    // Add action buttons
+	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	        	   @Override
+	        	   public void onClick(DialogInterface dialog, int id) {
+	        			EditText editt = (EditText)view.findViewById(R.id.nfc_waiter_name);
+	        		   	String waiter_name = editt.getText().toString();
+						Log.d("hun", editt.getText().toString());
+			   			prefs = getSharedPreferences("waiter", Activity.MODE_PRIVATE);
+						Editor edit = prefs.edit();
+						edit.putString("waiter_name", waiter_name);
+						edit.putString("restaurant_id", "1");
+						edit.commit();
 
-				registerGcm();
-				
+						registerGcm();
+						AlertDialog.Builder buildera = new AlertDialog.Builder(NFCWaiterPopupActivity.this);
+						buildera.setMessage("Registered to WAIGENT!")
+	                          .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	                              public void onClick(DialogInterface dialog, int id) {
+	                            	  finish();
+	                              }
+	                          });
+		           	   	AlertDialog dialoga = buildera.create();
+		           	   	dialoga.show();
+	               }
+	           })
+	           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	               public void onClick(DialogInterface dialog, int id) {
+	            	   finish();
+	               }
+	           });      
 
-				finish();
-			}
-		});
-
-		cancel_button.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
+	    AlertDialog dialog = builder.create();
+	    dialog.show();
 	}
 
 	@Override
