@@ -4,7 +4,9 @@ package com.cs408.cocktailor_Activity;
 import com.cs408.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,22 +26,18 @@ private SharedPreferences prefs;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.call_received);	
-		Button bt = (Button)findViewById(R.id.confirm_call);
+		
 		long[] pattern = {100, 200};
 		final Vibrator m_vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		m_vibrator.vibrate(pattern, 1);
-		bt.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				m_vibrator.cancel();
-				// TODO Auto-generated method stub
-				finish();
-			}
-			
-		});
+		new AlertDialog.Builder(CallAlertActivity.this)
+			.setTitle("Waigent - Customer Call")
+			.setMessage("\ntable : 3\n\ntonic water\n")
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int id) {
+                	  finish();
+                  }
+              }).show();
 	}
 
 	@Override

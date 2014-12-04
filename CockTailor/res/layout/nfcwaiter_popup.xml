@@ -3,23 +3,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-	<TextView
-	    android:layout_width="match_parent"
-	    android:layout_height="30dp"
-	    android:layout_marginLeft="40dp"
-	    android:layout_marginTop="10dp"
-	    android:scaleType="center"
-	    android:text="Waigent Waiter Mode"
-	    android:textSize="22sp" />
-    
     <EditText
         android:id="@+id/nfc_waiter_name"
         android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="20dp"
         android:hint="waiter name" />
 </LinearLayout>

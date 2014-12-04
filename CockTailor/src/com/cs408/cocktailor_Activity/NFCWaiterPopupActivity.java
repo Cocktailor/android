@@ -50,11 +50,15 @@ private SharedPreferences prefs;
 		super.onCreate(savedInstanceState);
 		
 		
+		long[] pattern = {100, 200};
+		final Vibrator m_vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		m_vibrator.vibrate(pattern, 1);
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(NFCWaiterPopupActivity.this);
 	    LayoutInflater inflater = NFCWaiterPopupActivity.this.getLayoutInflater();
 	    final View view = inflater.inflate(R.layout.nfcwaiter_popup, null);
 	    builder.setView(view)
-	    // Add action buttons
+	    	.setTitle("Wagent Waiter Mode")
 	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	        	   @Override
 	        	   public void onClick(DialogInterface dialog, int id) {
@@ -69,7 +73,7 @@ private SharedPreferences prefs;
 
 						registerGcm();
 						AlertDialog.Builder buildera = new AlertDialog.Builder(NFCWaiterPopupActivity.this);
-						buildera.setMessage("Registered to WAIGENT!")
+						buildera.setTitle("Registered to WAIGENT!")
 	                          .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	                              public void onClick(DialogInterface dialog, int id) {
 	                            	  finish();
