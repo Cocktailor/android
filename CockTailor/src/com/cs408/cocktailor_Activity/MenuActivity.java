@@ -236,7 +236,7 @@ public class MenuActivity extends Activity {
 			            	   Call_waiter c = new Call_waiter();
 			            	   c.table = table_number;
 			            	   c.functional_call_name = fc.name;
-			            	   c.restaurant_id = "1";
+			            	   c.restaurant_id = Integer.toString(rest_id);
 			            	   c.execute("");
 	                    }
 	            }).show();			    
