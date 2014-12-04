@@ -63,9 +63,7 @@ private SharedPreferences prefs;
 				edit.commit();
 
 				registerGcm();
-				BroadcastReceiver mReceiver = new CustomerFindReceiver();
-				IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-				registerReceiver(mReceiver, filter);
+				
 
 				finish();
 			}

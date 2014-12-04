@@ -25,6 +25,9 @@ public class WaiterCallService extends Service {
 	@Override
 	public void onCreate() {
 //		Toast.makeText(this, "Waiter Service is created", 1).show();
+		BroadcastReceiver mReceiver = new CustomerFindReceiver();
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		registerReceiver(mReceiver, filter);
 		super.onCreate();
 
 	}
