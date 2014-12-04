@@ -21,6 +21,8 @@ import org.apache.http.util.EntityUtils;
 import com.cs408.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -73,14 +75,14 @@ public class CartActivity extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 
-				(new send_order()).execute("");
-				Intent intent = new Intent();
-				intent.setClass(getApplicationContext(), CartConfirmActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
-				finish();
+				new AlertDialog.Builder(CartActivity.this)
+				.setTitle("Order Complete!")
+				.setItems(new String[]{"Ok"}, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+          				finish();
+					}
+				}).show();
 			}
-
 		});
 
 		CartListAdapter adapter = new CartListAdapter(this, R.layout.cart_list,
@@ -203,5 +205,4 @@ public class CartActivity extends Activity {
 			return null;
 		}
 	}
-
 }

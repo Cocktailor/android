@@ -3,16 +3,34 @@ package com.cs408.cocktailor_Activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,13 +55,18 @@ import org.json.JSONObject;
 import com.cs408.R;
 import com.cs408.cocktailor_Service.BluetoothService;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.app.AlertDialog;
@@ -66,6 +89,27 @@ public class MenuActivity extends Activity {
 
 	};
 	
+	public class ArrayAdapterWithIcon extends ArrayAdapter<String> {
+
+		private List<Bitmap> images;
+
+		public ArrayAdapterWithIcon(Context context, String[] items, Bitmap[] images) {
+		    super(context, android.R.layout.select_dialog_item, items);
+		    this.images = Arrays.asList(images);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+		    View view = super.getView(position, convertView, parent);
+		    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+		    Drawable d = new BitmapDrawable(getResources(),images.get(position));
+		    textView.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+		    textView.setCompoundDrawablePadding(
+		    		(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getContext().getResources().getDisplayMetrics()));
+		    return view;
+		}
+	}
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -152,6 +196,7 @@ public class MenuActivity extends Activity {
 			}
 		});
 		
+
 		call_button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -159,18 +204,22 @@ public class MenuActivity extends Activity {
 //						Toast.LENGTH_SHORT).show();
 				
 				String nameArray[] = new String[fclist.size()];  
-				
+				Bitmap iconArray[] = new Bitmap[fclist.size()]; 
 				
 				for(int i=0; i<fclist.size(); i++) {
 					Functional_Call_Information fc = fclist.get(i);
 					nameArray[i] = fc.name;
+					iconArray[i] = fc.bmimg;
+					Log.d("hun", fc.bmimg.toString());
 				}
 				
-			    AlertDialog.Builder builder = new AlertDialog.Builder(MenuActivity.this);
-			    builder.setTitle("Call")
-			           .setItems(nameArray, new DialogInterface.OnClickListener() {
-			               public void onClick(DialogInterface dialog, int which) {
-			            	   Functional_Call_Information fc = fclist.get(which);
+	            ListAdapter adapter = new ArrayAdapterWithIcon(MenuActivity.this, nameArray, iconArray);
+
+	            new AlertDialog.Builder(MenuActivity.this)
+	            	.setTitle("Waigent Call")
+	                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface dialog, int item ) {
+			            	   Functional_Call_Information fc = fclist.get(item);
 			            	   Log.d("yo", fc.toString());
 			            	   
 			            	   BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -185,13 +234,8 @@ public class MenuActivity extends Activity {
 			            	   c.functional_call_name = fc.name;
 			            	   c.restaurant_id = "1";
 			            	   c.execute("");
-
-			              }
-			    });
-			    
-				AlertDialog dialog = builder.create();
-			    dialog.show();
-			    
+	                    }
+	            }).show();			    
 			}
 		});
 		SharedPreferences prefs =  getSharedPreferences("from", Activity.MODE_PRIVATE);
@@ -264,7 +308,12 @@ public class MenuActivity extends Activity {
 		protected void onPostExecute(ArrayList<String> result) {
 			super.onPostExecute(result);
 			dialog.dismiss();
-
+			new AlertDialog.Builder(MenuActivity.this)
+				.setTitle("Call Completed!")
+				.setItems(new String[]{"Ok"}, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				}).show();
 		}
 
 		@Override
@@ -321,6 +370,7 @@ public class MenuActivity extends Activity {
 			dialog.show();
 		}
 
+		
 		@Override
 		protected ArrayList<Detail_Information> doInBackground(String... params) {
 			ArrayList<Detail_Information> result = new ArrayList<Detail_Information>();
@@ -403,6 +453,27 @@ public class MenuActivity extends Activity {
 					fc.restaurant_id = restaurant_id;
 					fc.name = name;
 					fc.pic_link = pic_link;
+					String url = "http://cs408.kaist.ac.kr:4418/api/picture/"+fc.pic_link;
+					URL myFileUrl;
+					
+					try {
+						myFileUrl = new URL(url);
+						HttpURLConnection conn;
+						conn = (HttpURLConnection) myFileUrl.openConnection();
+						conn.setDoInput(true);
+						conn.connect();
+	
+						InputStream is = conn.getInputStream();
+	
+						fc.bmimg = BitmapFactory.decodeStream(is);
+						fc.bmimg = getclip(fc.bmimg, 200, 200);
+					}  catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					fclist.add(fc);
 				}
@@ -413,4 +484,38 @@ public class MenuActivity extends Activity {
 			return result;
 		}
 	}
+	
+	public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+	    int width = bm.getWidth();
+	    int height = bm.getHeight();
+	    float scaleWidth = ((float) newWidth) / width;
+	    float scaleHeight = ((float) newHeight) / height;
+	    // CREATE A MATRIX FOR THE MANIPULATION
+	    Matrix matrix = new Matrix();
+	    // RESIZE THE BIT MAP
+	    matrix.postScale(scaleWidth, scaleHeight);
+
+	    // "RECREATE" THE NEW BITMAP
+	    Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+	    return resizedBitmap;
+	}
+	
+	public Bitmap getclip(Bitmap bitmap, int height, int width) {
+		bitmap = getResizedBitmap(bitmap, height, width);
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(),
+                bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        // paint.setColor(color);
+        canvas.drawCircle(bitmap.getWidth() / 2,
+                bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
+    }
 }
