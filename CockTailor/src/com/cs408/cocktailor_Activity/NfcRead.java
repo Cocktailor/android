@@ -37,7 +37,7 @@ public class NfcRead extends Activity {
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		if (mNfcAdapter == null) {
-			Toast.makeText(this, "NFC�� �������� �ʴ� ����Դϴ�.", Toast.LENGTH_LONG)
+			Toast.makeText(this, "NFC", Toast.LENGTH_LONG)
 					.show();
 			return;
 		}
@@ -179,7 +179,7 @@ public class NfcRead extends Activity {
 				intent.setClass(getApplicationContext(), SplashScreen.class);
 
 				edit.putBoolean("NFC", true);
-				edit.putInt("restaurant", Integer.parseInt(result.substring(-1, -1)));
+				edit.putInt("restaurant", Integer.parseInt(result.split("customer")[1]));
 				edit.putString("who", "customer");
 				edit.commit();
 				prefs = getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
