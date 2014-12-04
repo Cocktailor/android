@@ -132,6 +132,10 @@ public class MenuActivity extends Activity {
 		mChildList.add(mChildListContent1);
 		mChildList.add(mChildListContent1);
 
+		SharedPreferences prefs =  getSharedPreferences("from", Activity.MODE_PRIVATE);
+		final int rest_id = prefs.getInt("restaurant", 1);
+		final String table_number = prefs.getString("table_number", "");
+
 		adapter = new BaseExpandableAdapter(this, mGroupList, mChildList);
 		mListView.setAdapter(adapter);
 
@@ -230,7 +234,7 @@ public class MenuActivity extends Activity {
 			            	   startActivity(discoverableIntent);
 			            	   
 			            	   Call_waiter c = new Call_waiter();
-			            	   c.table = "3";
+			            	   c.table = table_number;
 			            	   c.functional_call_name = fc.name;
 			            	   c.restaurant_id = "1";
 			            	   c.execute("");
@@ -238,8 +242,6 @@ public class MenuActivity extends Activity {
 	            }).show();			    
 			}
 		});
-		SharedPreferences prefs =  getSharedPreferences("from", Activity.MODE_PRIVATE);
-		final int rest_id = prefs.getInt("restaurant", 1);
 
 		(new Menu_receive())
 				.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/" + Integer.toString(rest_id));

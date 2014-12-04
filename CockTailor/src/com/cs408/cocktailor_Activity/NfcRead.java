@@ -179,7 +179,9 @@ public class NfcRead extends Activity {
 				intent.setClass(getApplicationContext(), SplashScreen.class);
 
 				edit.putBoolean("NFC", true);
-				edit.putInt("restaurant", Integer.parseInt(result.split("customer")[1]));
+				edit.putInt("restaurant", Integer.parseInt(result.split("customer")[1].substring(0, 1)));
+				edit.putString("table_number", result.split("customer")[1].substring(1, 2));
+				Log.e("customer","Table Number = " + result.split("customer")[1].substring(1, 2));
 				edit.putString("who", "customer");
 				edit.commit();
 				prefs = getSharedPreferences( "cart" , Activity.MODE_PRIVATE);
