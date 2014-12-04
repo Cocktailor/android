@@ -7,6 +7,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -197,12 +199,18 @@ public class NfcRead extends Activity {
 				startActivity(intent);
 
 				finish();
-			} else if (result.equals("waiter")) {
+			} else if (result.contains("waiter")) {
+//				long[] pattern = {100, 200};
+//				final Vibrator m_vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//				m_vibrator.vibrate(pattern, 1);
+//
+				edit.putInt("restaurant", Integer.parseInt(result.split("waiter")[1].substring(0, 1)));
 				Log.e("my", "waiter mode");
 				Intent service = new Intent(getApplicationContext(), WaiterCallService.class);
 				startService(service);
 				edit.putBoolean("NFC", true);
 				edit.putString("who", "waiter");
+				edit.commit();
 				finish();
 			}
 		}
