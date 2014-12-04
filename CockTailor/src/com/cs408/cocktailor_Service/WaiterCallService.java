@@ -2,6 +2,7 @@ package com.cs408.cocktailor_Service;
 
 import com.cs408.cocktailor_Activity.CallAlertActivity;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.PendingIntent.CanceledException;
@@ -43,7 +44,7 @@ public class WaiterCallService extends Service {
 
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 		adapter.enable();
-
+	    
 		Intent waiterPopupIntent = new Intent(getApplicationContext(), NFCWaiterPopupActivity.class);
 
 		Bundle bun = new Bundle();

@@ -1,50 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/waigent_popup">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/NFCWaiterTextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
-        android:gravity="center"
-        android:text="Please Input Your Name"
-        android:textSize="22sp" />
-
+	<TextView
+	    android:layout_width="match_parent"
+	    android:layout_height="30dp"
+	    android:layout_marginLeft="40dp"
+	    android:layout_marginTop="10dp"
+	    android:scaleType="center"
+	    android:text="Waigent Waiter Mode"
+	    android:textSize="22sp" />
+    
     <EditText
-        android:id="@+id/NFCWaiterEditText"
-        android:layout_width="wrap_content"
+        android:id="@+id/nfc_waiter_name"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/NFCWaiterTextview"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:gravity="center"
-        android:inputType="text" >
-
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/OkayButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/NFCWaiterEditText"
-        android:layout_marginLeft="180dp"
-        android:layout_marginTop="20dp"
-        android:text="Okay" />
-
-    <Button
-        android:id="@+id/CancelButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/NFCWaiterTextview"
-        android:layout_below="@+id/NFCWaiterEditText"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
-        android:text="Cancel" />
-
-</RelativeLayout>
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="waiter name" />
+</LinearLayout>
