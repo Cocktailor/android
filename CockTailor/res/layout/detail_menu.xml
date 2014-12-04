@@ -39,11 +39,6 @@
             android:textSize="22sp"
             android:background="#00000000" />
 
-        <RatingBar
-            android:id="@+id/ratingBar2"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,7 +77,7 @@
             android:layout_height="wrap_content"
             android:textSize="17sp"
             android:paddingTop="10dp"
-            android:textColor="#FF888888"
+            android:textColor="#665959"
             android:text="@string/description"
             android:background="#00000000" />
         
