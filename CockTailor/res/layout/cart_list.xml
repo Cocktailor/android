@@ -10,10 +10,8 @@
         android:layout_height="wrap_content"
         android:textColor="#665959"
         android:layout_gravity="left"
-        android:maxWidth="200dp"
-        android:minWidth="200dp"
         android:text="Menu"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <Space
         android:layout_width="0dp"
@@ -25,10 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:maxWidth="30dp"
-        android:minWidth="30dp"
+        android:layout_marginRight="20sp"
         android:textColor="#665959"
         android:text="am"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
 </LinearLayout>

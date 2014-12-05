@@ -34,11 +34,10 @@
         
         <TextView
             android:id="@+id/total_price"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="150sp"
             android:textSize="20sp"
-            android:layout_weight="0.5"
             android:textColor="#665959"
             />
 
