@@ -468,7 +468,7 @@ public class MenuActivity extends Activity {
 						InputStream is = conn.getInputStream();
 	
 						fc.bmimg = BitmapFactory.decodeStream(is);
-						fc.bmimg = getclip(fc.bmimg, 200, 200);
+						fc.bmimg = ImageCutHelper.getclip(fc.bmimg, 200, 200);
 					}  catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -487,37 +487,4 @@ public class MenuActivity extends Activity {
 		}
 	}
 	
-	public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-	    int width = bm.getWidth();
-	    int height = bm.getHeight();
-	    float scaleWidth = ((float) newWidth) / width;
-	    float scaleHeight = ((float) newHeight) / height;
-	    // CREATE A MATRIX FOR THE MANIPULATION
-	    Matrix matrix = new Matrix();
-	    // RESIZE THE BIT MAP
-	    matrix.postScale(scaleWidth, scaleHeight);
-
-	    // "RECREATE" THE NEW BITMAP
-	    Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-	    return resizedBitmap;
-	}
-	
-	public Bitmap getclip(Bitmap bitmap, int height, int width) {
-		bitmap = getResizedBitmap(bitmap, height, width);
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(),
-                bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        // paint.setColor(color);
-        canvas.drawCircle(bitmap.getWidth() / 2,
-                bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }
 }
