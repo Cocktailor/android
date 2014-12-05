@@ -179,6 +179,7 @@ public class CartActivity extends Activity {
 				parameters.add(new BasicNameValuePair("order_content",
 						post_string.substring(0, post_string.length() - 3)));
 				Log.e("my", post_string.substring(0, post_string.length() - 3));
+				int price = prefs.getInt("price", 0);
 				Editor edit = prefs.edit();
 				edit.clear();
 				edit.commit();
@@ -190,7 +191,7 @@ public class CartActivity extends Activity {
 				String table_number = prefsa.getString("table_number", "0");
 				parameters.add(new BasicNameValuePair("table", table_number));
 				int rest_id = prefsa.getInt("restaurant", 1);
-				int price = prefs.getInt("price", 0);
+				
 				parameters.add(new BasicNameValuePair("restaurant_id", Integer.toString(rest_id)));
 				parameters.add(new BasicNameValuePair("price",Integer.toString(price)));
 				parameters.add(new BasicNameValuePair("time", sdf.format(d)));
