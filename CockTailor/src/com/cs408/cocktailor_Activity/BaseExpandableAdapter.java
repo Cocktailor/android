@@ -161,8 +161,8 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 
 			viewHolder.menu_minus_button = (ImageButton) v.findViewById(R.id.menu_minus_button1);
 			Bitmap icon2 = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_minus);
-			icon = ImageCutHelper.getclip(icon2, 75, 75);
-			viewHolder.menu_minus_button.setImageBitmap(icon);
+			icon2 = ImageCutHelper.getclip(icon2, 75, 75);
+			viewHolder.menu_minus_button.setImageBitmap(icon2);
 			
 			
 			viewHolder.thumbnail = (ImageView) v.findViewById(R.id.child_thumbnail);
@@ -223,7 +223,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				
 			}
 		});
-		viewHolder.menu_plus_button
+		viewHolder.menu_minus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -255,7 +255,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				adapter.notifyDataSetChanged();
 			}
 		});
-		viewHolder.menu_minus_button
+		viewHolder.menu_plus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
