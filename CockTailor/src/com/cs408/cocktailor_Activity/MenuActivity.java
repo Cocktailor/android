@@ -245,13 +245,6 @@ public class MenuActivity extends Activity {
 
 		(new Menu_receive())
 				.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/" + Integer.toString(rest_id));
-		refresh_button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				(new Menu_receive())
-						.execute("http://cs408.kaist.ac.kr:4418/api/menu_receive/"+ Integer.toString(rest_id));
-			}
-		});
 	}
 	@Override
 	protected void onStart() {
@@ -284,12 +277,11 @@ public class MenuActivity extends Activity {
 	 * Layout
 	 */
 	private ExpandableListView mListView;
-	private ImageButton cart_button, refresh_button, call_button;
+	private ImageButton cart_button, call_button;
 
 	private void setLayout() {
 		mListView = (ExpandableListView) findViewById(R.id.menu_list);
 		cart_button = (ImageButton) findViewById(R.id.order_button1);
-		refresh_button = (ImageButton) findViewById(R.id.refresh_button);
 		call_button = (ImageButton) findViewById(R.id.call_button1);
 	}
 

@@ -181,6 +181,23 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		}
 
 		thumbnail = viewHolder.thumbnail;
+		viewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.d("my","selected Item = " + getChild(groupP, childP));
+				Intent intent = new Intent(v.getContext(),DetailViewActivity.class);
+				//Intent intent = new Intent(v.getContext(),CallAlertActivity.class);
+				intent.putExtra("item", getChild(groupP, childP).menu_name);
+				intent.putExtra("pic_link", getChild(groupP, childP).pic_link);
+				intent.putExtra("price", getChild(groupP, childP).price);
+				intent.putExtra("description", getChild(groupP, childP).description);
+				intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+				v.getContext().startActivity(intent);
+				
+			}
+		});
 
 		ImageLoader imageloader = new ImageLoader(this.mContext);
 		

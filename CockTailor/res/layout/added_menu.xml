@@ -14,9 +14,9 @@
 
         <ImageButton
             android:id="@+id/cart_back_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="300dp"
+            android:layout_width="45sp"
+            android:layout_height="45sp"
+            android:layout_marginLeft="310dp"
             android:src="@drawable/waigent_back1" />
     </LinearLayout>
 
@@ -34,10 +34,10 @@
         
         <TextView
             android:id="@+id/total_price"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="250dp"
-            android:layout_weight="0.5"
+            android:layout_marginLeft="150sp"
+            android:textSize="20sp"
             android:textColor="#665959"
             />
 
