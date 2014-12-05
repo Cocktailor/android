@@ -109,9 +109,13 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 		}
 
 		if (isExpanded) {
-			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow2);
+			Bitmap icon = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.temp_arrow2);
+			icon = ImageCutHelper.getclip(icon, 104, 104);
+			viewHolder.iv_image.setImageBitmap(icon);
 		} else {
-			viewHolder.iv_image.setImageResource(R.drawable.temp_arrow1);
+			Bitmap icon = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.temp_arrow1);
+			icon = ImageCutHelper.getclip(icon, 104, 104);
+			viewHolder.iv_image.setImageBitmap(icon);
 		}
 
 		viewHolder.tv_groupName.setText(getGroup(groupPosition).menu_name);
@@ -148,10 +152,18 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			v = inflater.inflate(R.layout.cocktail_list_row, null);
 			viewHolder.tv_childName = (TextView) v.findViewById(R.id.tv_child);
 			viewHolder.price = (TextView)v.findViewById(R.id.price);
-			viewHolder.menu_plus_button = (ImageButton) v
-					.findViewById(R.id.menu_add_button1);
-			viewHolder.menu_minus_button = (ImageButton) v
-					.findViewById(R.id.menu_minus_button1);
+			
+			viewHolder.menu_plus_button = (ImageButton) v.findViewById(R.id.menu_add_button1);
+			Bitmap icon = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_minus);
+			icon = ImageCutHelper.getclip(icon, 100, 100);
+			viewHolder.menu_plus_button.setImageBitmap(icon);
+			
+			viewHolder.menu_minus_button = (ImageButton) v.findViewById(R.id.menu_minus_button1);
+			Bitmap icon2 = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_plus);
+			icon = ImageCutHelper.getclip(icon2, 100, 100);
+			viewHolder.menu_minus_button.setImageBitmap(icon);
+			
+			
 			viewHolder.thumbnail = (ImageView) v.findViewById(R.id.child_thumbnail);
 			viewHolder.count = (TextView)v.findViewById(R.id.counting);
 			

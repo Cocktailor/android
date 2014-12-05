@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/ratingBar1"
-        android:background="#00ff0000"
-        android:src="@drawable/waigent_minus" />
+        android:background="#00ff0000"/>
 
     <ImageButton
         android:id="@+id/menu_minus_button1"
@@ -25,8 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/menu_add_button1"
         android:layout_toLeftOf="@+id/counting"
-        android:background="#00ff0000"
-        android:src="@drawable/waigent_plus" />
+        android:background="#00ff0000"/>
 
     <TextView
         android:id="@+id/counting"
