@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@android:color/transparent"
-            android:src="@drawable/cocktailor_x1" />
+            android:src="@drawable/waigent_x1" />
     </LinearLayout>
 
     <LinearLayout
