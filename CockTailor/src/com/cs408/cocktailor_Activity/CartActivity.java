@@ -85,6 +85,8 @@ public class CartActivity extends Activity {
 				}).show();
 			}
 		});
+		TextView show_price = (TextView)findViewById(R.id.total_price);
+		show_price.setText("Total Price = " + Integer.toString(prefs.getInt("price", 0)));
 
 		CartListAdapter adapter = new CartListAdapter(this, R.layout.cart_list,
 				menus);
@@ -188,8 +190,9 @@ public class CartActivity extends Activity {
 				String table_number = prefsa.getString("table_number", "0");
 				parameters.add(new BasicNameValuePair("table", table_number));
 				int rest_id = prefsa.getInt("restaurant", 1);
+				int price = prefs.getInt("price", 0);
 				parameters.add(new BasicNameValuePair("restaurant_id", Integer.toString(rest_id)));
-				parameters.add(new BasicNameValuePair("price", "0"));
+				parameters.add(new BasicNameValuePair("price",Integer.toString(price)));
 				parameters.add(new BasicNameValuePair("time", sdf.format(d)));
 
 				UrlEncodedFormEntity ent = new UrlEncodedFormEntity(parameters,
