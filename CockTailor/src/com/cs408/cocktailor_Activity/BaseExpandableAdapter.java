@@ -151,16 +151,17 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 			viewHolder = new ViewHolder();
 			v = inflater.inflate(R.layout.cocktail_list_row, null);
 			viewHolder.tv_childName = (TextView) v.findViewById(R.id.tv_child);
-			viewHolder.price = (TextView)v.findViewById(R.id.price);
 			
 			viewHolder.menu_plus_button = (ImageButton) v.findViewById(R.id.menu_add_button1);
-			Bitmap icon = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_minus);
-			icon = ImageCutHelper.getclip(icon, 100, 100);
+			Bitmap icon = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_plus);
+			icon = ImageCutHelper.getclip(icon, 75, 75);
 			viewHolder.menu_plus_button.setImageBitmap(icon);
 			
+			viewHolder.price = (TextView)v.findViewById(R.id.price);
+
 			viewHolder.menu_minus_button = (ImageButton) v.findViewById(R.id.menu_minus_button1);
-			Bitmap icon2 = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_plus);
-			icon = ImageCutHelper.getclip(icon2, 100, 100);
+			Bitmap icon2 = BitmapFactory.decodeResource(this.mContext.getResources(), R.drawable.waigent_minus);
+			icon = ImageCutHelper.getclip(icon2, 75, 75);
 			viewHolder.menu_minus_button.setImageBitmap(icon);
 			
 			
@@ -205,7 +206,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				
 			}
 		});
-		viewHolder.menu_minus_button
+		viewHolder.menu_plus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -227,7 +228,6 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 					total_price-=getChild(groupP, childP).price;
 				}
 				else{
-					
 				}
 				
 				
@@ -238,7 +238,7 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				adapter.notifyDataSetChanged();
 			}
 		});
-		viewHolder.menu_plus_button
+		viewHolder.menu_minus_button
 		.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -263,12 +263,12 @@ public class BaseExpandableAdapter extends BaseExpandableListAdapter {
 				edit.putInt("price", total_price);
 				edit.putStringSet("added_menu", added_menu);
 				edit.commit();
-				Toast.makeText(
-						v.getContext(),
-						getChild(groupP, childP).menu_name
-								+ "is added in cart\n" +
-								"Total Price = " + Integer.toString(total_price),
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(
+//						v.getContext(),
+//						getChild(groupP, childP).menu_name
+//								+ "is added in cart\n" +
+//								"Total Price = " + Integer.toString(total_price),
+//						Toast.LENGTH_SHORT).show();
 				adapter.notifyDataSetChanged();
 			}
 		});

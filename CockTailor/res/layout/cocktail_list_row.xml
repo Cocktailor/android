@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
 
     <ImageView
         android:id="@+id/child_thumbnail"
@@ -10,51 +11,56 @@
         android:scaleType="fitCenter"
         android:src="@drawable/cocktailor_x1" />
 
-    <ImageButton
-        android:id="@+id/menu_add_button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/ratingBar1"
-        android:background="#00ff0000"/>
-
-    <ImageButton
-        android:id="@+id/menu_minus_button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/menu_add_button1"
-        android:layout_toLeftOf="@+id/counting"
-        android:background="#00ff0000"/>
-
-    <TextView
-        android:id="@+id/counting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/menu_add_button1"
-        android:layout_toLeftOf="@+id/menu_add_button1"
-        android:text="0"
-        android:textColor="#665959"
-        android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/menu_minus_button1"
-        android:textSize="18sp"
-        android:textColor="#665959"
-        android:text="\2000" />
-
     <TextView
         android:id="@+id/tv_child"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/menu_minus_button1"
-        android:layout_toRightOf="@+id/child_thumbnail"
-        android:maxWidth="100dp"
-        android:minWidth="100dp"
+        android:maxWidth="140dp"
+        android:minWidth="140dp"
         android:textColor="#665959"
         android:text="@string/textview_test"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="4dp"/>
+    
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#665959"
+        android:text="\2000"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="6dp"/>
+    
+    <ImageButton
+        android:id="@+id/menu_minus_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00ff0000"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="6dp"/>
 
-</RelativeLayout>
+    
+    <TextView
+        android:id="@+id/counting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="#665959"
+        android:textSize="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="2dp"/>
+    
+    <ImageButton
+        android:id="@+id/menu_add_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00ff0000"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="2dp"/>
+
+    
+
+
+</LinearLayout>
